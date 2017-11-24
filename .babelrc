@@ -1,0 +1,26 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "loose": true,
+        "modules": false
+      }
+    ]
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        [
+          "env"
+        ]
+      ]
+    }
+  },
+  "plugins": [
+    "syntax-dynamic-import"
+  ],
+  "ignore": [
+    "node_modules"
+  ]
+}

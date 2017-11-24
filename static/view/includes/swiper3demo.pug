@@ -1,0 +1,14 @@
+link(href="//cdn.bootcss.com/Swiper/3.4.2/css/swiper.min.css", rel="stylesheet")
+script(src="//cdn.bootcss.com/Swiper/3.4.2/js/swiper.min.js")
+
+script.
+  var mySwiper = new Swiper('.swiper-container', {
+    onInit: function (swiper) {
+      new SwiperAnimation(swiper).animate();
+    },
+    onSlideChangeEnd: function (swiper) {
+      new SwiperAnimation(swiper).animate();
+    }
+  });
+
+  console.log(mySwiper);
