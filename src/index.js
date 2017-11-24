@@ -25,7 +25,7 @@ export default class SwiperAnimation {
           activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'))
         ;
 
-        return Promise.all(activeBoxes.map(el => {
+        let runAnimations = activeBoxes.map(el => new Promise(resolve => {
           let
             style = ''
             , effect = el.dataset.swiperAnimation || ''
@@ -47,7 +47,11 @@ export default class SwiperAnimation {
           el.classList.add(effect, 'animated');
 
           el.isRecovery = false;
+
+          setTimeout(() => resolve(), 0);
         }));
+
+        return Promise.all(runAnimations);
       });
   };
 

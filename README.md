@@ -59,7 +59,7 @@ let mySwiper4 = new Swiper('.swiper-container', {
 
 ### Add attribute on elements you want animate
 ```html
-<div data-swiper-animation="fadeIn" data-duration=".5s" data-delay="1s">Slider3</div>
+<div data-swiper-animation="fadeIn" data-duration=".5s" data-delay="1s">Animation</div>
 ```
 
 * `data-swiper-animation`: [require] Animation class name.

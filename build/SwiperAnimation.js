@@ -111,22 +111,30 @@ var SwiperAnimation = function () {
     }).then(function () {
       var activeBoxes = Object(__WEBPACK_IMPORTED_MODULE_1_awesome_js_funcs_typeConversion_nodeListToArray__["a" /* default */])(_this.swiper.slides[_this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
 
-      return Promise.all(activeBoxes.map(function (el) {
-        var style = '',
-            effect = el.dataset.swiperAnimation || '',
-            duration = el.dataset.duration || '.5s',
-            delay = el.dataset.delay || '.5s';
+      var runAnimations = activeBoxes.map(function (el) {
+        return new Promise(function (resolve) {
+          var style = '',
+              effect = el.dataset.swiperAnimation || '',
+              duration = el.dataset.duration || '.5s',
+              delay = el.dataset.delay || '.5s';
 
-        el.style.visibility = 'visible';
+          el.style.visibility = 'visible';
 
-        style = el.style.cssText + ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
+          style = el.style.cssText + ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
 
-        el.style.cssText = style;
+          el.style.cssText = style;
 
-        el.classList.add(effect, 'animated');
+          el.classList.add(effect, 'animated');
 
-        el.isRecovery = false;
-      }));
+          el.isRecovery = false;
+
+          setTimeout(function () {
+            return resolve();
+          }, 0);
+        });
+      });
+
+      return Promise.all(runAnimations);
     });
   };
 
