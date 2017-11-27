@@ -16,6 +16,10 @@ export default class SwiperAnimation {
     _instance(this);
   };
 
+  /**
+   * run animations
+   * @return {Promise.<TResult>}
+   */
   animate() {
     return Promise.resolve()
       .then(() => this._cache())
@@ -56,31 +60,34 @@ export default class SwiperAnimation {
   };
 
   _clear() {
-    return Promise.all(
-      this.allBoxes.map(el => {
-        return new Promise(resolve => {
-          if (el.isRecovery) {
-            resolve();
-            return;
-          }
+    let _runClearTasks = this.allBoxes.map(el => new Promise(resolve => {
+      if (el.isRecovery) {
+        resolve();
+        return;
+      }
 
-          // recovery
-          if (el.styleCache) {
-            el.style.cssText = el.styleCache;
-            el.classList.remove('animated');
+      // recovery
+      if (el.styleCache) {
+        el.style.cssText = el.styleCache;
+        el.classList.remove('animated');
 
-            if (el.dataset.swiperAnimation) {
-              el.classList.remove(el.dataset.swiperAnimation);
-            }
-          }
+        if (el.dataset.swiperAnimation) {
+          el.classList.remove(el.dataset.swiperAnimation);
+        }
+      }
 
-          el.isRecovery = true;
-          setTimeout(() => resolve(), 0);
-        });
-      }),
-    );
+      el.isRecovery = true;
+      setTimeout(() => resolve(), 0);
+    }));
+
+    return Promise.all(_runClearTasks);
   };
 
+  /**
+   * cache allBoxes style
+   * @return {*}
+   * @private
+   */
   _cache() {
     // has cached
     if (this.allBoxes.length) {
@@ -95,21 +102,30 @@ export default class SwiperAnimation {
       setTimeout(() => resolve(), 0);
     })
       .then(() => {
-        return new Promise(resolve => {
-          this.allBoxes.forEach(el => {
+
+        let
+          _runCacheTasks = this.allBoxes.map(el => new Promise(resolve => {
             if (el.attributes['style']) {
               el.styleCache = sHidden + el.style.cssText;
             } else {
               el.styleCache = sHidden;
             }
+            el.style.cssText = el.styleCache;
             el.isRecovery = true;  // add el property isRecovery
-          });
 
-          setTimeout(() => resolve(), 0);
-        });
+            setTimeout(() => resolve(), 0);
+          }))
+        ;
+
+
+        return Promise.all(_runCacheTasks);
       });
   };
 
+  /**
+   * init this.allBoxes
+   * @private
+   */
   _initAllBoxes() {
     if (!this.allBoxes.length) {
       let

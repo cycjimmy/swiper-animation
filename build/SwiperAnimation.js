@@ -101,6 +101,10 @@ var SwiperAnimation = function () {
     _instance(this);
   }
 
+  /**
+   * run animations
+   * @return {Promise.<TResult>}
+   */
   SwiperAnimation.prototype.animate = function animate() {
     var _this = this;
 
@@ -139,7 +143,7 @@ var SwiperAnimation = function () {
   };
 
   SwiperAnimation.prototype._clear = function _clear() {
-    return Promise.all(this.allBoxes.map(function (el) {
+    var _runClearTasks = this.allBoxes.map(function (el) {
       return new Promise(function (resolve) {
         if (el.isRecovery) {
           resolve();
@@ -161,9 +165,16 @@ var SwiperAnimation = function () {
           return resolve();
         }, 0);
       });
-    }));
+    });
+
+    return Promise.all(_runClearTasks);
   };
 
+  /**
+   * cache allBoxes style
+   * @return {*}
+   * @private
+   */
   SwiperAnimation.prototype._cache = function _cache() {
     var _this2 = this;
 
@@ -181,23 +192,31 @@ var SwiperAnimation = function () {
         return resolve();
       }, 0);
     }).then(function () {
-      return new Promise(function (resolve) {
-        _this2.allBoxes.forEach(function (el) {
+
+      var _runCacheTasks = _this2.allBoxes.map(function (el) {
+        return new Promise(function (resolve) {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;
           } else {
             el.styleCache = sHidden;
           }
+          el.style.cssText = el.styleCache;
           el.isRecovery = true; // add el property isRecovery
-        });
 
-        setTimeout(function () {
-          return resolve();
-        }, 0);
+          setTimeout(function () {
+            return resolve();
+          }, 0);
+        });
       });
+
+      return Promise.all(_runCacheTasks);
     });
   };
 
+  /**
+   * init this.allBoxes
+   * @private
+   */
   SwiperAnimation.prototype._initAllBoxes = function _initAllBoxes() {
     if (!this.allBoxes.length) {
       var swiperWrapper = null;

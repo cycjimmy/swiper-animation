@@ -44,8 +44,8 @@ const SwiperAnimation = require('swiper-animation');
 
 // use swiper 3+
 let mySwiper3 = new Swiper('.swiper-container', {
-  onInit: () => (swiper) => new SwiperAnimation(swiper).animate(),
-  onSlideChangeEnd: () => (swiper) => new SwiperAnimation(swiper).animate()
+  onInit: (swiper) => new SwiperAnimation(swiper).animate(),
+  onSlideChangeEnd: (swiper) => new SwiperAnimation(swiper).animate()
 });
 
 // use swiper 4+

@@ -3,6 +3,10 @@ script(src="//cdn.bootcss.com/Swiper/4.0.6/js/swiper.min.js")
 
 script.
   var mySwiper = new Swiper('.swiper-container', {
+    //    hashNavigation: {
+    //      watchState: true,
+    //      replaceState: true
+    //    },
     on: {
       init: function () {
         new SwiperAnimation(this).animate();

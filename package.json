@@ -1,6 +1,6 @@
 {
   "name": "swiper-animation",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Easier way to run animations on swiper.",
   "main": "build/SwiperAnimation.min.js",
   "scripts": {
