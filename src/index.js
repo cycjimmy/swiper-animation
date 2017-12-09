@@ -1,19 +1,20 @@
-import CreateInstance from 'awesome-js-funcs/designPattern/CreateInstance';
 import nodeListToArray from 'awesome-js-funcs/typeConversion/nodeListToArray';
 
 let
-  _instance = new CreateInstance()
-  , sHidden = 'visibility: hidden;'
+  sHidden = 'visibility: hidden;'
 ;
 
 export default class SwiperAnimation {
-  constructor(swiper) {
-    if (_instance()) {
-      return _instance();
-    }
-    this.swiper = swiper;
+  constructor() {
+    this.swiper = null;
     this.allBoxes = [];
-    _instance(this);
+  };
+
+  init(swiper) {
+    if (!this.swiper) {
+      this.swiper = swiper;
+    }
+    return this;
   };
 
   /**

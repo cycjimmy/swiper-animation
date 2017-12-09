@@ -1,6 +1,6 @@
 {
   "name": "swiper-animation",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Easier way to run animations on swiper.",
   "main": "build/SwiperAnimation.min.js",
   "scripts": {
@@ -43,11 +43,11 @@
     "jest": "^21.2.1",
     "pug": "^2.0.0-rc.4",
     "pug-loader": "^2.3.0",
-    "regenerator-runtime": "^0.11.0",
-    "swiper": "^4.0.6",
-    "uglify-js": "^3.1.10",
-    "uglifyjs-webpack-plugin": "^1.1.0",
-    "webpack": "^3.8.1"
+    "regenerator-runtime": "^0.11.1",
+    "swiper": "^4.0.7",
+    "uglify-js": "^3.2.1",
+    "uglifyjs-webpack-plugin": "^1.1.2",
+    "webpack": "^3.10.0"
   },
   "engines": {
     "node": ">=6"

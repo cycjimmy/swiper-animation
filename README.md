@@ -43,16 +43,18 @@ import SwiperAnimation from 'swiper-animation';
 const SwiperAnimation = require('swiper-animation');
 
 // use swiper 3+
+let swiperAnimation = new SwiperAnimation();
 let mySwiper3 = new Swiper('.swiper-container', {
-  onInit: (swiper) => new SwiperAnimation(swiper).animate(),
-  onSlideChangeEnd: (swiper) => new SwiperAnimation(swiper).animate()
+  onInit: (swiper) => swiperAnimation.init(swiper).animate(),
+  onSlideChangeEnd: (swiper) => swiperAnimation.init(swiper).animate()
 });
 
 // use swiper 4+
+let swiperAnimation = new SwiperAnimation();
 let mySwiper4 = new Swiper('.swiper-container', {
   on: {
-    init: () => new SwiperAnimation(mySwiper4).animate(),
-    slideChange: () => new SwiperAnimation(mySwiper4).animate()
+    init: () => swiperAnimation.init(mySwiper4).animate(),
+    slideChange: () => swiperAnimation.init(mySwiper4).animate()
   }
 });
 ```
@@ -94,23 +96,25 @@ let mySwiper4 = new Swiper('.swiper-container', {
 <script src="SwiperAnimation.min.js"></script>
 <script>
   // use swiper 3+
+  var swiperAnimation = new SwiperAnimation();
   var mySwiper3 = new Swiper('.swiper-container', {
     onInit: function(swiper) {
-      new SwiperAnimation(swiper).animate();
+      swiperAnimation.init(swiper).animate();
     },
     onSlideChangeEnd: function(swiper) {
-      new SwiperAnimation(swiper).animate();
+      swiperAnimation.init(swiper).animate();
     }
   });
 
   // use swiper 4+
+  var swiperAnimation = new SwiperAnimation();
   var mySwiper4 = new Swiper('.swiper-container', {
     on: {
       init: function () {
-        new SwiperAnimation(this).animate();
+        swiperAnimation.init(this).animate();
       },
       slideChange: function () {
-        new SwiperAnimation(this).animate();
+        swiperAnimation.init(this).animate();
       }
     }
   });
