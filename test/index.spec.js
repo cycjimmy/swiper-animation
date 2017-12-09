@@ -22,12 +22,15 @@ wrapper.innerHTML = `
 let mySwiper = new Swiper(wrapper);
 
 // mock onInit
-new SwiperAnimation(mySwiper)._cache();
+let
+  swiperAnimation = new SwiperAnimation().init(mySwiper);
+
+swiperAnimation._cache();
 
 
 describe('default spec', () => {
   test('default test', () => {
-    expect(new SwiperAnimation().swiper).toBe(mySwiper);
+    expect(swiperAnimation.swiper).toBe(mySwiper);
   });
 });
 
