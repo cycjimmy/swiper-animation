@@ -6,6 +6,7 @@
 [![devDependencies Status][david-dev-image]][david-dev-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
+[![jsdelivr][jsdelivr-image]][jsdelivr-url]
 [![npm license][license-image]][download-url]
 
 [npm-image]: https://img.shields.io/npm/v/swiper-animation.svg?style=flat-square
@@ -20,6 +21,8 @@
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/swiper-animation.svg?style=flat-square
 [download-url]: https://npmjs.org/package/swiper-animation
+[jsdelivr-image]: https://data.jsdelivr.com/v1/package/npm/swiper-animation/badge
+[jsdelivr-url]: https://www.jsdelivr.com/package/npm/swiper-animation
 [license-image]: https://img.shields.io/npm/l/swiper-animation.svg?style=flat-square
 
 ([Releases](https://github.com/cycdpo/swiper-animation/releases) | [Demo](https://cycdpo.github.io/swiper-animation/))
@@ -121,5 +124,9 @@ let mySwiper4 = new Swiper('.swiper-container', {
 </script>
 ```
 
-
+## CDN
+To use via a CDN include this in your html:
+```text
+<script src="https://cdn.jsdelivr.net/npm/swiper-animation@1.1.0/build/SwiperAnimation.min.js"></script>
+```
 
