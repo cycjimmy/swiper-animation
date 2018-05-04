@@ -127,6 +127,6 @@ let mySwiper4 = new Swiper('.swiper-container', {
 ## CDN
 To use via a CDN include this in your html:
 ```text
-<script src="https://cdn.jsdelivr.net/npm/swiper-animation@1.1.0/build/SwiperAnimation.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper-animation@1/build/SwiperAnimation.min.js"></script>
 ```
 
