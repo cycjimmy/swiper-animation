@@ -92,34 +92,57 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var sHidden = 'visibility: hidden;';
 
+var PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
+
 var SwiperAnimation = function () {
   function SwiperAnimation() {
     _classCallCheck(this, SwiperAnimation);
 
     this.swiper = null;
     this.allBoxes = [];
+
+    this.appendedPromise = false;
+    this.isPromiseReady = false;
   }
 
   SwiperAnimation.prototype.init = function init(swiper) {
+    var _this = this;
+
     if (!this.swiper) {
       this.swiper = swiper;
     }
+
+    if (this.isPromiseReady || window.Promise) {
+      this.isPromiseReady = true;
+      return this;
+    }
+
+    // fix "Promise Is Undefined" in IE
+    this._initPromisePolyfill(function () {
+      _this.isPromiseReady = true;
+    });
     return this;
   };
 
   /**
    * run animations
-   * @return {Promise.<TResult>}
+   * @return {*}
    */
   SwiperAnimation.prototype.animate = function animate() {
-    var _this = this;
+    var _this2 = this;
+
+    if (!this.isPromiseReady) {
+      return setTimeout(function () {
+        return _this2.animate();
+      }, 5e2);
+    }
 
     return Promise.resolve().then(function () {
-      return _this._cache();
+      return _this2._cache();
     }).then(function () {
-      return _this._clear();
+      return _this2._clear();
     }).then(function () {
-      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this.swiper.slides[_this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
+      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
 
       var runAnimations = activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
@@ -182,7 +205,7 @@ var SwiperAnimation = function () {
    * @private
    */
   SwiperAnimation.prototype._cache = function _cache() {
-    var _this2 = this;
+    var _this3 = this;
 
     // has cached
     if (this.allBoxes.length) {
@@ -193,13 +216,13 @@ var SwiperAnimation = function () {
 
     // start cache
     return new Promise(function (resolve) {
-      _this2._initAllBoxes();
+      _this3._initAllBoxes();
       setTimeout(function () {
         return resolve();
       }, 0);
     }).then(function () {
 
-      var _runCacheTasks = _this2.allBoxes.map(function (el) {
+      var _runCacheTasks = _this3.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;
@@ -237,6 +260,29 @@ var SwiperAnimation = function () {
 
       this.allBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
     }
+  };
+
+  /**
+   * init PromisePolyfill
+   * @param callback
+   * @private
+   */
+  SwiperAnimation.prototype._initPromisePolyfill = function _initPromisePolyfill() {
+    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+
+    // just add promise-polyfill script once
+    if (this.appendedPromise) {
+      return;
+    }
+
+    var oScript = document.createElement("script");
+    oScript.type = "text/javascript";
+    oScript.onload = function () {
+      return callback();
+    };
+    oScript.src = PROMISE_POLYFILL_URL;
+    document.querySelector('head').appendChild(oScript);
+    this.appendedPromise = true;
   };
 
   return SwiperAnimation;
