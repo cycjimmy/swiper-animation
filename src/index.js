@@ -4,24 +4,43 @@ let
   sHidden = 'visibility: hidden;'
 ;
 
+const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
+
 export default class SwiperAnimation {
   constructor() {
     this.swiper = null;
     this.allBoxes = [];
+
+    this.appendedPromise = false;
+    this.isPromiseReady = false;
   };
 
   init(swiper) {
     if (!this.swiper) {
       this.swiper = swiper;
     }
+
+    if (this.isPromiseReady || window.Promise) {
+      this.isPromiseReady = true;
+      return this;
+    }
+
+    // fix "Promise Is Undefined" in IE
+    this._initPromisePolyfill(() => {
+      this.isPromiseReady = true;
+    });
     return this;
   };
 
   /**
    * run animations
-   * @return {Promise.<TResult>}
+   * @return {*}
    */
   animate() {
+    if (!this.isPromiseReady) {
+      return setTimeout(() => this.animate(), 5e2);
+    }
+
     return Promise.resolve()
       .then(() => this._cache())
       .then(() => this._clear())
@@ -143,5 +162,25 @@ export default class SwiperAnimation {
 
       this.allBoxes = nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
     }
+  };
+
+  /**
+   * init PromisePolyfill
+   * @param callback
+   * @private
+   */
+  _initPromisePolyfill(callback = () => {
+  }) {
+    // just add promise-polyfill script once
+    if (this.appendedPromise) {
+      return;
+    }
+
+    let oScript = document.createElement("script");
+    oScript.type = "text/javascript";
+    oScript.onload = () => callback();
+    oScript.src = PROMISE_POLYFILL_URL;
+    document.querySelector('head').appendChild(oScript);
+    this.appendedPromise = true;
   };
 };
