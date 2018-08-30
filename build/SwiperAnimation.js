@@ -1,3 +1,8 @@
+/*!
+ * swiper-animation v1.2.2
+ * Homepage: https://github.com/cycdpo/swiper-animation#readme
+ * Released under the MIT License.
+ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -46,17 +51,32 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
 /******/ 	};
 /******/
 /******/ 	// define __esModule on exports
 /******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
 /******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
@@ -85,27 +105,25 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SwiperAnimation; });
 /* harmony import */ var awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
 
 var sHidden = 'visibility: hidden;';
-
 var PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
 
-var SwiperAnimation = function () {
+var SwiperAnimation =
+/*#__PURE__*/
+function () {
   function SwiperAnimation() {
-    _classCallCheck(this, SwiperAnimation);
-
     this.swiper = null;
     this.allBoxes = [];
-
     this.appendedPromise = false;
     this.isPromiseReady = false;
   }
 
-  SwiperAnimation.prototype.init = function init(swiper) {
+  var _proto = SwiperAnimation.prototype;
+
+  _proto.init = function init(swiper) {
     var _this = this;
 
     if (!this.swiper) {
@@ -115,12 +133,13 @@ var SwiperAnimation = function () {
     if (this.isPromiseReady || window.Promise) {
       this.isPromiseReady = true;
       return this;
-    }
+    } // fix "Promise Is Undefined" in IE
 
-    // fix "Promise Is Undefined" in IE
+
     this._initPromisePolyfill(function () {
       _this.isPromiseReady = true;
     });
+
     return this;
   };
 
@@ -128,7 +147,7 @@ var SwiperAnimation = function () {
    * run animations
    * @return {*}
    */
-  SwiperAnimation.prototype.animate = function animate() {
+  _proto.animate = function animate() {
     var _this2 = this;
 
     if (!this.isPromiseReady) {
@@ -143,43 +162,35 @@ var SwiperAnimation = function () {
       return _this2._clear();
     }).then(function () {
       var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
-
       var runAnimations = activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
           var style = '',
               effect = el.dataset.swiperAnimation || '',
               duration = el.dataset.duration || '.5s',
               delay = el.dataset.delay || '.5s';
-
           el.style.visibility = 'visible';
-
           style = el.style.cssText + ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
-
           el.style.cssText = style;
-
           el.classList.add(effect, 'animated');
-
           el.isRecovery = false;
-
           setTimeout(function () {
             return resolve();
           }, 0);
         });
       });
-
       return Promise.all(runAnimations);
     });
   };
 
-  SwiperAnimation.prototype._clear = function _clear() {
+  _proto._clear = function _clear() {
     var _runClearTasks = this.allBoxes.map(function (el) {
       return new Promise(function (resolve) {
         if (el.isRecovery) {
           resolve();
           return;
-        }
+        } // recovery
 
-        // recovery
+
         if (el.styleCache) {
           el.style.cssText = el.styleCache;
           el.classList.remove('animated');
@@ -204,7 +215,7 @@ var SwiperAnimation = function () {
    * @return {*}
    * @private
    */
-  SwiperAnimation.prototype._cache = function _cache() {
+  _proto._cache = function _cache() {
     var _this3 = this;
 
     // has cached
@@ -212,16 +223,15 @@ var SwiperAnimation = function () {
       return Promise.resolve();
     }
 
-    console.log('cache');
+    console.log('cache'); // start cache
 
-    // start cache
     return new Promise(function (resolve) {
       _this3._initAllBoxes();
+
       setTimeout(function () {
         return resolve();
       }, 0);
     }).then(function () {
-
       var _runCacheTasks = _this3.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
           if (el.attributes['style']) {
@@ -229,6 +239,7 @@ var SwiperAnimation = function () {
           } else {
             el.styleCache = sHidden;
           }
+
           el.style.cssText = el.styleCache;
           el.isRecovery = true; // add el property isRecovery
 
@@ -246,7 +257,7 @@ var SwiperAnimation = function () {
    * init this.allBoxes
    * @private
    */
-  SwiperAnimation.prototype._initAllBoxes = function _initAllBoxes() {
+  _proto._initAllBoxes = function _initAllBoxes() {
     if (!this.allBoxes.length) {
       var swiperWrapper = null;
 
@@ -267,8 +278,10 @@ var SwiperAnimation = function () {
    * @param callback
    * @private
    */
-  SwiperAnimation.prototype._initPromisePolyfill = function _initPromisePolyfill() {
-    var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+  _proto._initPromisePolyfill = function _initPromisePolyfill(callback) {
+    if (callback === void 0) {
+      callback = function callback() {};
+    }
 
     // just add promise-polyfill script once
     if (this.appendedPromise) {
@@ -277,9 +290,11 @@ var SwiperAnimation = function () {
 
     var oScript = document.createElement("script");
     oScript.type = "text/javascript";
+
     oScript.onload = function () {
       return callback();
     };
+
     oScript.src = PROMISE_POLYFILL_URL;
     document.querySelector('head').appendChild(oScript);
     this.appendedPromise = true;
@@ -288,7 +303,7 @@ var SwiperAnimation = function () {
   return SwiperAnimation;
 }();
 
-/* harmony default export */ __webpack_exports__["default"] = (SwiperAnimation);
+
 ;
 
 /***/ }),
