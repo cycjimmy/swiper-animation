@@ -34,7 +34,7 @@ $ yarn add swiper-animation
 ```
 
 ## Usage
-**Swiper Animation based on [Swiper](https://github.com/nolimits4web/Swiper). Add Script of swiper in your project first**
+**Swiper Animation based on [Swiper](https://github.com/nolimits4web/Swiper). Add Script of swiper in your project first.**
 
 ```javascript
 import SwiperAnimation from 'swiper-animation';
@@ -59,14 +59,14 @@ let mySwiper4 = new Swiper('.swiper-container', {
 });
 ```
 
-### Add attribute on elements you want animate
+### Add attribute on elements you want animated.
 ```html
 <div data-swiper-animation="fadeIn" data-duration=".5s" data-delay="1s">Animation</div>
 ```
 
-* `data-swiper-animation`: [require] Animation class name.
-* `data-duration`: [option] Set animation-duration. Default: `.5s`.
-* `data-delay`: [option] Set animation-delay. Default: `.5s`.
+* `data-swiper-animation`: [Require] Animation class name.
+* `data-duration`: [Option] Set animation-duration. Default: `.5s`.
+* `data-delay`: [Option] Set animation-delay. Default: `.5s`.
 
 ### Animation Effect
 * Recommended [Animate.css](https://github.com/daneden/animate.css)
@@ -122,7 +122,7 @@ let mySwiper4 = new Swiper('.swiper-container', {
 ```
 
 ## CDN
-To use via a CDN include this in your html:
+To use via a CDN include this in your HTML:
 ```text
 <script src="https://cdn.jsdelivr.net/npm/swiper-animation@1/build/SwiperAnimation.min.js"></script>
 ```

@@ -42,28 +42,22 @@ export default class SwiperAnimation {
       .then(() => this._cache())
       .then(() => this._clear())
       .then(() => {
-        let
-          activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.realIndex].querySelectorAll('[data-swiper-animation]'))
-        ;
+        const activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
 
-        let runAnimations = activeBoxes.map(el => new Promise(resolve => {
-          let
-            style = ''
-            , effect = el.dataset.swiperAnimation || ''
+        const runAnimations = activeBoxes.map(el => new Promise(resolve => {
+          const
+            effect = el.dataset.swiperAnimation || ''
             , duration = el.dataset.duration || '.5s'
             , delay = el.dataset.delay || '.5s'
           ;
 
           el.style.visibility = 'visible';
 
-          style = el.style.cssText
-            + ' animation-duration:' + duration
+          el.style.cssText += ' animation-duration:' + duration
             + '; -webkit-animation-duration:' + duration
             + '; animation-delay:' + delay
             + '; -webkit-animation-delay:' + delay
             + ';';
-
-          el.style.cssText = style;
 
           el.classList.add(effect, 'animated');
 
@@ -77,7 +71,7 @@ export default class SwiperAnimation {
   };
 
   _clear() {
-    let _runClearTasks = this.allBoxes.map(el => new Promise(resolve => {
+    const _runClearTasks = this.allBoxes.map(el => new Promise(resolve => {
       if (el.isRecovery) {
         resolve();
         return;
@@ -120,20 +114,17 @@ export default class SwiperAnimation {
     })
       .then(() => {
 
-        let
-          _runCacheTasks = this.allBoxes.map(el => new Promise(resolve => {
-            if (el.attributes['style']) {
-              el.styleCache = sHidden + el.style.cssText;
-            } else {
-              el.styleCache = sHidden;
-            }
-            el.style.cssText = el.styleCache;
-            el.isRecovery = true;  // add el property isRecovery
+        const _runCacheTasks = this.allBoxes.map(el => new Promise(resolve => {
+          if (el.attributes['style']) {
+            el.styleCache = sHidden + el.style.cssText;
+          } else {
+            el.styleCache = sHidden;
+          }
+          el.style.cssText = el.styleCache;
+          el.isRecovery = true;  // add el property isRecovery
 
-            setTimeout(() => resolve(), 0);
-          }))
-        ;
-
+          setTimeout(() => resolve(), 0);
+        }));
 
         return Promise.all(_runCacheTasks);
       });
@@ -173,8 +164,8 @@ export default class SwiperAnimation {
       return;
     }
 
-    let oScript = document.createElement("script");
-    oScript.type = "text/javascript";
+    let oScript = document.createElement('script');
+    oScript.type = 'text/javascript';
     oScript.onload = () => callback();
     oScript.src = PROMISE_POLYFILL_URL;
     document.querySelector('head').appendChild(oScript);

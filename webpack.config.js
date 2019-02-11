@@ -110,6 +110,7 @@ if (IS_DEVELOPMENT) {
 // production mode
 if (IS_PRODUCTION) {
   config.mode = 'production';
+  config.bail = true;
 
   config.plugins.push(
     new webpack.HashedModuleIdsPlugin(),
