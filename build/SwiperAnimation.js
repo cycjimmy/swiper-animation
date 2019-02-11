@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v1.2.3
+ * swiper-animation v1.2.4
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -161,16 +161,14 @@ function () {
     }).then(function () {
       return _this2._clear();
     }).then(function () {
-      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.realIndex].querySelectorAll('[data-swiper-animation]'));
+      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
       var runAnimations = activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
-          var style = '',
-              effect = el.dataset.swiperAnimation || '',
+          var effect = el.dataset.swiperAnimation || '',
               duration = el.dataset.duration || '.5s',
               delay = el.dataset.delay || '.5s';
           el.style.visibility = 'visible';
-          style = el.style.cssText + ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
-          el.style.cssText = style;
+          el.style.cssText += ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
           el.classList.add(effect, 'animated');
           el.isRecovery = false;
           setTimeout(function () {
@@ -288,8 +286,8 @@ function () {
       return;
     }
 
-    var oScript = document.createElement("script");
-    oScript.type = "text/javascript";
+    var oScript = document.createElement('script');
+    oScript.type = 'text/javascript';
 
     oScript.onload = function () {
       return callback();
