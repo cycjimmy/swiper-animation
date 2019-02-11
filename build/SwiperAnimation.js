@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v1.2.2
+ * swiper-animation v1.2.3
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -314,14 +314,13 @@ function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _judgeBasic_isNodeList__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
 
-
 /**
  * nodeList转变为数组
  * @param nodeList
  * @returns {Array}
  */
-/* harmony default export */ __webpack_exports__["default"] = (function (nodeList) {
 
+/* harmony default export */ __webpack_exports__["default"] = (function (nodeList) {
   if (Array.isArray(nodeList)) {
     return nodeList;
   }
