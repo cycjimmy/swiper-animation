@@ -61,12 +61,20 @@ let mySwiper4 = new Swiper('.swiper-container', {
 
 ### Add attribute on elements you want animated.
 ```html
-<div data-swiper-animation="fadeIn" data-duration=".5s" data-delay="1s">Animation</div>
+<div 
+  data-swiper-animation="fadeIn" 
+  data-duration=".5s" 
+  data-delay="1s" 
+  data-swiper-out-animation="fadeOut"
+  data-out-duration=".2s"
+>Animation</div>
 ```
 
-* `data-swiper-animation`: [Require] Animation class name.
+* `data-swiper-animation`: [Require] Animation class name for entering slide.
 * `data-duration`: [Option] Set animation-duration. Default: `.5s`.
 * `data-delay`: [Option] Set animation-delay. Default: `.5s`.
+* `data-swiper-out-animation`: [Option] Animation class name for leaving slide. Delay for leaving Animation is not supported.
+* `data-out-duration`: [Option] Set animation-duration for leaving slide. The value must be less than `.5s`. Default: `.5s`.
 
 ### Animation Effect
 * Recommended [Animate.css](https://github.com/daneden/animate.css)

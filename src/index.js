@@ -7,6 +7,7 @@ export default class SwiperAnimation {
   constructor() {
     this.swiper = null;
     this.allBoxes = [];
+    this.activeBoxes = [];
 
     this.appendedPromise = false;
     this.isPromiseReady = false;
@@ -40,11 +41,12 @@ export default class SwiperAnimation {
 
     return Promise.resolve()
       .then(() => this._cache())
+      .then(() => this._outAnimate())
       .then(() => this._clear())
       .then(() => {
-        const activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
+        this.activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
 
-        const runAnimations = activeBoxes.map(el => new Promise(resolve => {
+        const runAnimations = this.activeBoxes.map(el => new Promise(resolve => {
           const
             effect = el.dataset.swiperAnimation || ''
             , duration = el.dataset.duration || '.5s'
@@ -70,8 +72,37 @@ export default class SwiperAnimation {
       });
   };
 
+  _outAnimate() {
+    const _runOutTasks = this.activeBoxes.map(el => {
+      if (el.isRecovery) {
+        return Promise.resolve();
+      }
+
+      const outEffect = el.dataset.swiperOutAnimation;
+
+      if (!outEffect) {
+        return Promise.resolve();
+      }
+
+      return new Promise(resolve => {
+        const duration = el.dataset.outDuration || '.5s';
+        el.style.cssText = el.styleCache;
+        el.style.visibility = 'visible';
+        el.style.cssText += ' animation-duration:' + duration
+          + '; -webkit-animation-duration:' + duration
+          + ';';
+
+        el.classList.add(outEffect, 'animated');
+
+        setTimeout(resolve, 500);
+      });
+    });
+
+    return Promise.all(_runOutTasks)
+  };
+
   _clear() {
-    const _runClearTasks = this.allBoxes.map(el => new Promise(resolve => {
+    const _runClearTasks = this.activeBoxes.map(el => new Promise(resolve => {
       if (el.isRecovery) {
         resolve();
         return;
@@ -85,13 +116,18 @@ export default class SwiperAnimation {
         if (el.dataset.swiperAnimation) {
           el.classList.remove(el.dataset.swiperAnimation);
         }
+
+        if (el.dataset.swiperOutAnimation) {
+          el.classList.remove(el.dataset.swiperOutAnimation);
+        }
       }
 
       el.isRecovery = true;
       setTimeout(() => resolve(), 0);
     }));
 
-    return Promise.all(_runClearTasks);
+    return Promise.all(_runClearTasks)
+      .then(() => this.activeBoxes = []);
   };
 
   /**
@@ -113,7 +149,6 @@ export default class SwiperAnimation {
       setTimeout(resolve, 0);
     })
       .then(() => {
-
         const _runCacheTasks = this.allBoxes.map(el => new Promise(resolve => {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;

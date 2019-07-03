@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v1.2.5
+ * swiper-animation v1.3.0
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -117,6 +117,7 @@ function () {
   function SwiperAnimation() {
     this.swiper = null;
     this.allBoxes = [];
+    this.activeBoxes = [];
     this.appendedPromise = false;
     this.isPromiseReady = false;
   }
@@ -159,10 +160,13 @@ function () {
     return Promise.resolve().then(function () {
       return _this2._cache();
     }).then(function () {
+      return _this2._outAnimate();
+    }).then(function () {
       return _this2._clear();
     }).then(function () {
-      var activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
-      var runAnimations = activeBoxes.map(function (el) {
+      _this2.activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
+
+      var runAnimations = _this2.activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
           var effect = el.dataset.swiperAnimation || '',
               duration = el.dataset.duration || '.5s',
@@ -174,12 +178,40 @@ function () {
           setTimeout(resolve, 0);
         });
       });
+
       return Promise.all(runAnimations);
     });
   };
 
+  _proto._outAnimate = function _outAnimate() {
+    var _runOutTasks = this.activeBoxes.map(function (el) {
+      if (el.isRecovery) {
+        return Promise.resolve();
+      }
+
+      var outEffect = el.dataset.swiperOutAnimation;
+
+      if (!outEffect) {
+        return Promise.resolve();
+      }
+
+      return new Promise(function (resolve) {
+        var duration = el.dataset.outDuration || '.5s';
+        el.style.cssText = el.styleCache;
+        el.style.visibility = 'visible';
+        el.style.cssText += ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + ';';
+        el.classList.add(outEffect, 'animated');
+        setTimeout(resolve, 500);
+      });
+    });
+
+    return Promise.all(_runOutTasks);
+  };
+
   _proto._clear = function _clear() {
-    var _runClearTasks = this.allBoxes.map(function (el) {
+    var _this3 = this;
+
+    var _runClearTasks = this.activeBoxes.map(function (el) {
       return new Promise(function (resolve) {
         if (el.isRecovery) {
           resolve();
@@ -194,6 +226,10 @@ function () {
           if (el.dataset.swiperAnimation) {
             el.classList.remove(el.dataset.swiperAnimation);
           }
+
+          if (el.dataset.swiperOutAnimation) {
+            el.classList.remove(el.dataset.swiperOutAnimation);
+          }
         }
 
         el.isRecovery = true;
@@ -203,7 +239,9 @@ function () {
       });
     });
 
-    return Promise.all(_runClearTasks);
+    return Promise.all(_runClearTasks).then(function () {
+      return _this3.activeBoxes = [];
+    });
   };
 
   /**
@@ -212,7 +250,7 @@ function () {
    * @private
    */
   _proto._cache = function _cache() {
-    var _this3 = this;
+    var _this4 = this;
 
     // has cached
     if (this.allBoxes.length) {
@@ -222,11 +260,11 @@ function () {
     console.log('cache'); // start cache
 
     return new Promise(function (resolve) {
-      _this3._initAllBoxes();
+      _this4._initAllBoxes();
 
       setTimeout(resolve, 0);
     }).then(function () {
-      var _runCacheTasks = _this3.allBoxes.map(function (el) {
+      var _runCacheTasks = _this4.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
           if (el.attributes['style']) {
             el.styleCache = sHidden + el.style.cssText;
