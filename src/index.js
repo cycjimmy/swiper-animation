@@ -63,7 +63,7 @@ export default class SwiperAnimation {
 
           el.isRecovery = false;
 
-          setTimeout(() => resolve(), 0);
+          setTimeout(resolve, 0);
         }));
 
         return Promise.all(runAnimations);
@@ -110,7 +110,7 @@ export default class SwiperAnimation {
     // start cache
     return new Promise(resolve => {
       this._initAllBoxes();
-      setTimeout(() => resolve(), 0);
+      setTimeout(resolve, 0);
     })
       .then(() => {
 
@@ -123,7 +123,7 @@ export default class SwiperAnimation {
           el.style.cssText = el.styleCache;
           el.isRecovery = true;  // add el property isRecovery
 
-          setTimeout(() => resolve(), 0);
+          setTimeout(resolve, 0);
         }));
 
         return Promise.all(_runCacheTasks);
@@ -136,9 +136,7 @@ export default class SwiperAnimation {
    */
   _initAllBoxes() {
     if (!this.allBoxes.length) {
-      let
-        swiperWrapper = null
-      ;
+      let swiperWrapper = null;
 
       if (this.swiper.wrapperEl) {
         // swiper 4

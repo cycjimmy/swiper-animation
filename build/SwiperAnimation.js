@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v1.2.4
+ * swiper-animation v1.2.5
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -171,9 +171,7 @@ function () {
           el.style.cssText += ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
           el.classList.add(effect, 'animated');
           el.isRecovery = false;
-          setTimeout(function () {
-            return resolve();
-          }, 0);
+          setTimeout(resolve, 0);
         });
       });
       return Promise.all(runAnimations);
@@ -226,9 +224,7 @@ function () {
     return new Promise(function (resolve) {
       _this3._initAllBoxes();
 
-      setTimeout(function () {
-        return resolve();
-      }, 0);
+      setTimeout(resolve, 0);
     }).then(function () {
       var _runCacheTasks = _this3.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
@@ -241,9 +237,7 @@ function () {
           el.style.cssText = el.styleCache;
           el.isRecovery = true; // add el property isRecovery
 
-          setTimeout(function () {
-            return resolve();
-          }, 0);
+          setTimeout(resolve, 0);
         });
       });
 
