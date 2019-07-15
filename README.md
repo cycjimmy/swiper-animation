@@ -42,19 +42,27 @@ import SwiperAnimation from 'swiper-animation';
 # OR
 const SwiperAnimation = require('swiper-animation');
 
-// use swiper 3+
-let swiperAnimation = new SwiperAnimation();
-let mySwiper3 = new Swiper('.swiper-container', {
-  onInit: (swiper) => swiperAnimation.init(swiper).animate(),
-  onSlideChangeEnd: (swiper) => swiperAnimation.init(swiper).animate()
+// use swiper 3.x
+const swiperAnimation = new SwiperAnimation();
+const mySwiper3 = new Swiper('.swiper-container', {
+  onInit: function(swiper) {
+    swiperAnimation.init(swiper).animate();
+  },
+  onSlideChangeEnd: function(swiper) {
+    swiperAnimation.init(swiper).animate();
+  }
 });
 
 // use swiper 4+
-let swiperAnimation = new SwiperAnimation();
-let mySwiper4 = new Swiper('.swiper-container', {
+const swiperAnimation = new SwiperAnimation();
+const mySwiper4 = new Swiper('.swiper-container', {
   on: {
-    init: () => swiperAnimation.init(mySwiper4).animate(),
-    slideChange: () => swiperAnimation.init(mySwiper4).animate()
+    init: function () {
+      swiperAnimation.init(this).animate();
+    },
+    slideChange: function () {
+      swiperAnimation.init(this).animate();
+    }
   }
 });
 ```
