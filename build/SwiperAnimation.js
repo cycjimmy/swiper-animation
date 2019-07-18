@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v1.3.0
+ * swiper-animation v1.4.0
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -164,17 +164,14 @@ function () {
     }).then(function () {
       return _this2._clear();
     }).then(function () {
-      _this2.activeBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
+      _this2.activeBoxes = [].concat(Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')), Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')));
 
       var runAnimations = _this2.activeBoxes.map(function (el) {
         return new Promise(function (resolve) {
-          var effect = el.dataset.swiperAnimation || '',
-              duration = el.dataset.duration || '.5s',
-              delay = el.dataset.delay || '.5s';
           el.style.visibility = 'visible';
-          el.style.cssText += ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + '; animation-delay:' + delay + '; -webkit-animation-delay:' + delay + ';';
-          el.classList.add(effect, 'animated');
-          el.isRecovery = false;
+          el.style.cssText += ' animation-duration:' + el.__animationData.duration + '; -webkit-animation-duration:' + el.__animationData.duration + '; animation-delay:' + el.__animationData.delay + '; -webkit-animation-delay:' + el.__animationData.delay + ';';
+          el.classList.add(el.__animationData.effect, 'animated');
+          el.__animationData.isRecovery = false;
           setTimeout(resolve, 0);
         });
       });
@@ -185,22 +182,19 @@ function () {
 
   _proto._outAnimate = function _outAnimate() {
     var _runOutTasks = this.activeBoxes.map(function (el) {
-      if (el.isRecovery) {
+      if (el.__animationData.isRecovery) {
         return Promise.resolve();
       }
 
-      var outEffect = el.dataset.swiperOutAnimation;
-
-      if (!outEffect) {
+      if (!el.__animationData.outEffect) {
         return Promise.resolve();
       }
 
       return new Promise(function (resolve) {
-        var duration = el.dataset.outDuration || '.5s';
         el.style.cssText = el.styleCache;
         el.style.visibility = 'visible';
-        el.style.cssText += ' animation-duration:' + duration + '; -webkit-animation-duration:' + duration + ';';
-        el.classList.add(outEffect, 'animated');
+        el.style.cssText += ' animation-duration:' + el.__animationData.outDuration + '; -webkit-animation-duration:' + el.__animationData.outDuration + ';';
+        el.classList.add(el.__animationData.outEffect, 'animated');
         setTimeout(resolve, 500);
       });
     });
@@ -212,30 +206,26 @@ function () {
     var _this3 = this;
 
     var _runClearTasks = this.activeBoxes.map(function (el) {
+      if (el.__animationData.isRecovery) {
+        return Promise.resolve();
+      }
+
+      if (el.__animationData.runOnce) {
+        return Promise.resolve();
+      }
+
       return new Promise(function (resolve) {
-        if (el.isRecovery) {
-          resolve();
-          return;
-        } // recovery
+        var _el$classList;
 
+        // recovery
+        el.style.cssText = el.__animationData.styleCache;
 
-        if (el.styleCache) {
-          el.style.cssText = el.styleCache;
-          el.classList.remove('animated');
+        (_el$classList = el.classList).remove.apply(_el$classList, [el.__animationData.effect, el.__animationData.outEffect, 'animated'].filter(function (str) {
+          return !!str;
+        }));
 
-          if (el.dataset.swiperAnimation) {
-            el.classList.remove(el.dataset.swiperAnimation);
-          }
-
-          if (el.dataset.swiperOutAnimation) {
-            el.classList.remove(el.dataset.swiperOutAnimation);
-          }
-        }
-
-        el.isRecovery = true;
-        setTimeout(function () {
-          return resolve();
-        }, 0);
+        el.__animationData.isRecovery = true;
+        setTimeout(resolve, 0);
       });
     });
 
@@ -255,26 +245,25 @@ function () {
     // has cached
     if (this.allBoxes.length) {
       return Promise.resolve();
-    }
+    } // start cache
 
-    console.log('cache'); // start cache
 
-    return new Promise(function (resolve) {
-      _this4._initAllBoxes();
-
-      setTimeout(resolve, 0);
+    return Promise.resolve().then(function () {
+      return _this4._initAllBoxes();
     }).then(function () {
       var _runCacheTasks = _this4.allBoxes.map(function (el) {
         return new Promise(function (resolve) {
-          if (el.attributes['style']) {
-            el.styleCache = sHidden + el.style.cssText;
-          } else {
-            el.styleCache = sHidden;
-          }
-
-          el.style.cssText = el.styleCache;
-          el.isRecovery = true; // add el property isRecovery
-
+          el.__animationData = {
+            styleCache: el.attributes['style'] ? sHidden + el.style.cssText : sHidden,
+            effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || '',
+            duration: el.dataset.duration || '.5s',
+            delay: el.dataset.delay || '.5s',
+            outEffect: el.dataset.swiperOutAnimation || '',
+            outDuration: el.dataset.outDuration || '.5s',
+            isRecovery: true,
+            runOnce: !!el.dataset.swiperAnimationOnce
+          };
+          el.style.cssText = el.__animationData.styleCache;
           setTimeout(resolve, 0);
         });
       });
@@ -285,22 +274,30 @@ function () {
 
   /**
    * init this.allBoxes
+   * @returns {Promise<void>}
    * @private
    */
   _proto._initAllBoxes = function _initAllBoxes() {
-    if (!this.allBoxes.length) {
+    var _this5 = this;
+
+    if (this.allBoxes.length) {
+      return Promise.resolve();
+    }
+
+    return new Promise(function (resolve) {
       var swiperWrapper = null;
 
-      if (this.swiper.wrapperEl) {
-        // swiper 4
-        swiperWrapper = this.swiper.wrapperEl;
-      } else if (this.swiper.wrapper) {
-        // swiper 3+
-        swiperWrapper = this.swiper.wrapper[0];
+      if (_this5.swiper.wrapperEl) {
+        // swiper 4+
+        swiperWrapper = _this5.swiper.wrapperEl;
+      } else if (_this5.swiper.wrapper) {
+        // swiper 3.x
+        swiperWrapper = _this5.swiper.wrapper[0];
       }
 
-      this.allBoxes = Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
-    }
+      _this5.allBoxes = [].concat(Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation]')), Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation-once]')));
+      setTimeout(resolve, 0);
+    });
   };
 
   /**

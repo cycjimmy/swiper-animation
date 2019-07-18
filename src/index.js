@@ -44,26 +44,22 @@ export default class SwiperAnimation {
       .then(() => this._outAnimate())
       .then(() => this._clear())
       .then(() => {
-        this.activeBoxes = nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'));
+        this.activeBoxes = [
+          ...nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')),
+          ...nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')),
+        ];
 
         const runAnimations = this.activeBoxes.map(el => new Promise(resolve => {
-          const
-            effect = el.dataset.swiperAnimation || ''
-            , duration = el.dataset.duration || '.5s'
-            , delay = el.dataset.delay || '.5s'
-          ;
-
           el.style.visibility = 'visible';
 
-          el.style.cssText += ' animation-duration:' + duration
-            + '; -webkit-animation-duration:' + duration
-            + '; animation-delay:' + delay
-            + '; -webkit-animation-delay:' + delay
+          el.style.cssText += ' animation-duration:' + el.__animationData.duration
+            + '; -webkit-animation-duration:' + el.__animationData.duration
+            + '; animation-delay:' + el.__animationData.delay
+            + '; -webkit-animation-delay:' + el.__animationData.delay
             + ';';
 
-          el.classList.add(effect, 'animated');
-
-          el.isRecovery = false;
+          el.classList.add(el.__animationData.effect, 'animated');
+          el.__animationData.isRecovery = false;
 
           setTimeout(resolve, 0);
         }));
@@ -74,25 +70,22 @@ export default class SwiperAnimation {
 
   _outAnimate() {
     const _runOutTasks = this.activeBoxes.map(el => {
-      if (el.isRecovery) {
+      if (el.__animationData.isRecovery) {
         return Promise.resolve();
       }
 
-      const outEffect = el.dataset.swiperOutAnimation;
-
-      if (!outEffect) {
+      if (!el.__animationData.outEffect) {
         return Promise.resolve();
       }
 
       return new Promise(resolve => {
-        const duration = el.dataset.outDuration || '.5s';
         el.style.cssText = el.styleCache;
         el.style.visibility = 'visible';
-        el.style.cssText += ' animation-duration:' + duration
-          + '; -webkit-animation-duration:' + duration
+        el.style.cssText += ' animation-duration:' + el.__animationData.outDuration
+          + '; -webkit-animation-duration:' + el.__animationData.outDuration
           + ';';
 
-        el.classList.add(outEffect, 'animated');
+        el.classList.add(el.__animationData.outEffect, 'animated');
 
         setTimeout(resolve, 500);
       });
@@ -102,29 +95,31 @@ export default class SwiperAnimation {
   };
 
   _clear() {
-    const _runClearTasks = this.activeBoxes.map(el => new Promise(resolve => {
-      if (el.isRecovery) {
-        resolve();
-        return;
+    const _runClearTasks = this.activeBoxes.map(el => {
+      if (el.__animationData.isRecovery) {
+        return Promise.resolve();
       }
 
-      // recovery
-      if (el.styleCache) {
-        el.style.cssText = el.styleCache;
-        el.classList.remove('animated');
-
-        if (el.dataset.swiperAnimation) {
-          el.classList.remove(el.dataset.swiperAnimation);
-        }
-
-        if (el.dataset.swiperOutAnimation) {
-          el.classList.remove(el.dataset.swiperOutAnimation);
-        }
+      if (el.__animationData.runOnce) {
+        return Promise.resolve();
       }
 
-      el.isRecovery = true;
-      setTimeout(() => resolve(), 0);
-    }));
+      return new Promise(resolve => {
+        // recovery
+        el.style.cssText = el.__animationData.styleCache;
+
+        el.classList.remove(
+          ...[
+            el.__animationData.effect,
+            el.__animationData.outEffect,
+            'animated',
+          ].filter(str => !!str)
+        );
+
+        el.__animationData.isRecovery = true;
+        setTimeout(resolve, 0);
+      })
+    });
 
     return Promise.all(_runClearTasks)
       .then(() => this.activeBoxes = []);
@@ -141,25 +136,29 @@ export default class SwiperAnimation {
       return Promise.resolve();
     }
 
-    console.log('cache');
-
     // start cache
-    return new Promise(resolve => {
-      this._initAllBoxes();
-      setTimeout(resolve, 0);
-    })
+    return Promise.resolve()
+      .then(() => this._initAllBoxes())
       .then(() => {
-        const _runCacheTasks = this.allBoxes.map(el => new Promise(resolve => {
-          if (el.attributes['style']) {
-            el.styleCache = sHidden + el.style.cssText;
-          } else {
-            el.styleCache = sHidden;
-          }
-          el.style.cssText = el.styleCache;
-          el.isRecovery = true;  // add el property isRecovery
+        const _runCacheTasks = this.allBoxes
+          .map(el => new Promise(resolve => {
+            el.__animationData = {
+              styleCache: el.attributes['style']
+                ? sHidden + el.style.cssText
+                : sHidden,
+              effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || '',
+              duration: el.dataset.duration || '.5s',
+              delay: el.dataset.delay || '.5s',
+              outEffect: el.dataset.swiperOutAnimation || '',
+              outDuration: el.dataset.outDuration || '.5s',
+              isRecovery: true,
+              runOnce: !!(el.dataset.swiperAnimationOnce),
+            };
 
-          setTimeout(resolve, 0);
-        }));
+            el.style.cssText = el.__animationData.styleCache;
+
+            setTimeout(resolve, 0);
+          }));
 
         return Promise.all(_runCacheTasks);
       });
@@ -167,22 +166,32 @@ export default class SwiperAnimation {
 
   /**
    * init this.allBoxes
+   * @returns {Promise<void>}
    * @private
    */
   _initAllBoxes() {
-    if (!this.allBoxes.length) {
+    if (this.allBoxes.length) {
+      return Promise.resolve();
+    }
+
+    return new Promise(resolve => {
       let swiperWrapper = null;
 
       if (this.swiper.wrapperEl) {
-        // swiper 4
+        // swiper 4+
         swiperWrapper = this.swiper.wrapperEl;
       } else if (this.swiper.wrapper) {
-        // swiper 3+
+        // swiper 3.x
         swiperWrapper = this.swiper.wrapper[0];
       }
 
-      this.allBoxes = nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation]'));
-    }
+      this.allBoxes = [
+        ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation]')),
+        ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]')),
+      ];
+
+      setTimeout(resolve, 0);
+    });
   };
 
   /**
@@ -197,7 +206,7 @@ export default class SwiperAnimation {
       return;
     }
 
-    let oScript = document.createElement('script');
+    const oScript = document.createElement('script');
     oScript.type = 'text/javascript';
     oScript.onload = () => callback();
     oScript.src = PROMISE_POLYFILL_URL;

@@ -78,7 +78,8 @@ const mySwiper4 = new Swiper('.swiper-container', {
 >Animation</div>
 ```
 
-* `data-swiper-animation`: [Require] Animation class name for entering slide.
+* `data-swiper-animation`: [Option] Animation class name for entering slide.
+* `data-swiper-animation-once`: [Option] One-time Animation class name for entering slide.
 * `data-duration`: [Option] Set animation-duration. Default: `.5s`.
 * `data-delay`: [Option] Set animation-delay. Default: `.5s`.
 * `data-swiper-out-animation`: [Option] Animation class name for leaving slide. Delay for leaving Animation is not supported.
@@ -111,7 +112,7 @@ const mySwiper4 = new Swiper('.swiper-container', {
 <script src="swiper.min.js"></script>
 <script src="SwiperAnimation.min.js"></script>
 <script>
-  // use swiper 3+
+  // use swiper 3.x
   var swiperAnimation = new SwiperAnimation();
   var mySwiper3 = new Swiper('.swiper-container', {
     onInit: function(swiper) {
