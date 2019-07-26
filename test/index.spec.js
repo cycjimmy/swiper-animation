@@ -1,9 +1,7 @@
 import SwiperAnimation from '../build/SwiperAnimation.min';
 import Swiper from 'swiper';
 
-const
-  wrapper = document.createElement('div')
-;
+const wrapper = document.createElement('div');
 
 wrapper.style.width = '400px';
 wrapper.style.height = '300px';
@@ -19,14 +17,12 @@ wrapper.innerHTML = `
   </div>
 `;
 
-let mySwiper = new Swiper(wrapper);
+const mySwiper = new Swiper(wrapper);
 
 // mock onInit
-let
-  swiperAnimation = new SwiperAnimation().init(mySwiper);
+const swiperAnimation = new SwiperAnimation().init(mySwiper);
 
 swiperAnimation._cache();
-
 
 describe('default spec', () => {
   test('default test', () => {

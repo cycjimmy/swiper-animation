@@ -1,4 +1,4 @@
-var
+const
   path = require('path')
   , webpack = require('webpack')
   , packageJson = require('./package.json')
@@ -10,12 +10,12 @@ var
   , {CleanWebpackPlugin} = require('clean-webpack-plugin')
 ;
 
-var
+const
   IS_DEVELOPMENT = process.env.NODE_ENV === 'development'
   , IS_PRODUCTION = process.env.NODE_ENV === 'production'
 ;
 
-var config = {
+const config = {
   mode: 'none',
   entry: path.resolve('src', 'index.js'),
 
@@ -24,8 +24,8 @@ var config = {
       ? path.resolve('dist')
       : path.resolve('build'),
     filename: IS_PRODUCTION
-      ? 'SwiperAnimation.min.js'
-      : 'SwiperAnimation.js',
+      ? packageJson.name + '.min.js'
+      : packageJson.name + '.js',
     library: 'SwiperAnimation',
     libraryTarget: 'umd',
     libraryExport: 'default'
@@ -47,9 +47,6 @@ var config = {
         type: 'javascript/auto',
         include: [
           path.resolve('src'),
-        ],
-        exclude: [
-          path.resolve('node_modules'),
         ],
         loader: 'babel-loader'
       },

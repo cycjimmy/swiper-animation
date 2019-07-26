@@ -110,7 +110,7 @@ const mySwiper4 = new Swiper('.swiper-container', {
 </div>
 
 <script src="swiper.min.js"></script>
-<script src="SwiperAnimation.min.js"></script>
+<script src="swiper-animation.min.js"></script>
 <script>
   // use swiper 3.x
   var swiperAnimation = new SwiperAnimation();
@@ -141,6 +141,8 @@ const mySwiper4 = new Swiper('.swiper-container', {
 ## CDN
 To use via a CDN include this in your HTML:
 ```text
-<script src="https://cdn.jsdelivr.net/npm/swiper-animation@1/build/SwiperAnimation.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper-animation@2/build/swiper-animation.min.js"></script>
 ```
 
+## Earlier Version
+* [1.x](https://github.com/cycdpo/swiper-animation/tree/1.x)

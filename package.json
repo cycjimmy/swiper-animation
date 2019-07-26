@@ -1,8 +1,9 @@
 {
   "name": "swiper-animation",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "Easier way to run animations on swiper.",
-  "main": "build/SwiperAnimation.min.js",
+  "main": "build/swiper-animation.min.js",
+  "module": "src/index.js",
   "scripts": {
     "test": "jest",
     "start": "cross-env NODE_ENV=development webpack --display-modules --display-reasons --display-error-details --watch --color",

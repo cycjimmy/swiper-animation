@@ -10,8 +10,8 @@ test
 .travis.yml
 
 # project
-src
 dist
 static
 yarn.lock
+webpack.config.js
 
