@@ -1,4 +1,4 @@
-import SwiperAnimation from '../build/SwiperAnimation.min';
+import SwiperAnimation from '../build/swiper-animation.min';
 import Swiper from 'swiper';
 
 const wrapper = document.createElement('div');
