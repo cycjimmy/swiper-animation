@@ -1,5 +1,5 @@
 /*!
- * swiper-animation v2.0.0
+ * swiper-animation v2.0.1
  * Homepage: https://github.com/cycdpo/swiper-animation#readme
  * Released under the MIT License.
  */
@@ -107,6 +107,8 @@ return /******/ (function(modules) { // webpackBootstrap
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return SwiperAnimation; });
 /* harmony import */ var awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1);
+/* harmony import */ var awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3);
+
 
 var sHidden = 'visibility: hidden;';
 var PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
@@ -167,12 +169,15 @@ function () {
       _this2.activeBoxes = [].concat(Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')), Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(_this2.swiper.slides[_this2.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')));
 
       var runAnimations = _this2.activeBoxes.map(function (el) {
-        return new Promise(function (resolve) {
+        if (!el.__animationData) {
+          return Promise.resolve();
+        }
+
+        return Object(awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
           el.style.visibility = 'visible';
           el.style.cssText += ' animation-duration:' + el.__animationData.duration + '; -webkit-animation-duration:' + el.__animationData.duration + '; animation-delay:' + el.__animationData.delay + '; -webkit-animation-delay:' + el.__animationData.delay + ';';
           el.classList.add(el.__animationData.effect, 'animated');
           el.__animationData.isRecovery = false;
-          setTimeout(resolve, 0);
         });
       });
 
@@ -190,13 +195,12 @@ function () {
         return Promise.resolve();
       }
 
-      return new Promise(function (resolve) {
+      return Object(awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
         el.style.cssText = el.styleCache;
         el.style.visibility = 'visible';
         el.style.cssText += ' animation-duration:' + el.__animationData.outDuration + '; -webkit-animation-duration:' + el.__animationData.outDuration + ';';
         el.classList.add(el.__animationData.outEffect, 'animated');
-        setTimeout(resolve, 500);
-      });
+      }, 500);
     });
 
     return Promise.all(_runOutTasks);
@@ -214,7 +218,7 @@ function () {
         return Promise.resolve();
       }
 
-      return new Promise(function (resolve) {
+      return Object(awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
         var _el$classList;
 
         // recovery
@@ -225,7 +229,6 @@ function () {
         }));
 
         el.__animationData.isRecovery = true;
-        setTimeout(resolve, 0);
       });
     });
 
@@ -252,7 +255,7 @@ function () {
       return _this4._initAllBoxes();
     }).then(function () {
       var _runCacheTasks = _this4.allBoxes.map(function (el) {
-        return new Promise(function (resolve) {
+        return Object(awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
           el.__animationData = {
             styleCache: el.attributes['style'] ? sHidden + el.style.cssText : sHidden,
             effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || '',
@@ -264,7 +267,6 @@ function () {
             runOnce: !!el.dataset.swiperAnimationOnce
           };
           el.style.cssText = el.__animationData.styleCache;
-          setTimeout(resolve, 0);
         });
       });
 
@@ -284,7 +286,7 @@ function () {
       return Promise.resolve();
     }
 
-    return new Promise(function (resolve) {
+    return Object(awesome_js_funcs_typeConversion_functionToPromise__WEBPACK_IMPORTED_MODULE_1__["default"])(function () {
       var swiperWrapper = null;
 
       if (_this5.swiper.wrapperEl) {
@@ -296,7 +298,6 @@ function () {
       }
 
       _this5.allBoxes = [].concat(Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation]')), Object(awesome_js_funcs_typeConversion_nodeListToArray__WEBPACK_IMPORTED_MODULE_0__["default"])(swiperWrapper.querySelectorAll('[data-swiper-animation-once]')));
-      setTimeout(resolve, 0);
     });
   };
 
@@ -371,6 +372,50 @@ __webpack_require__.r(__webpack_exports__);
  */
 /* harmony default export */ __webpack_exports__["default"] = (function (nodeList) {
   return Object.prototype.toString.call(nodeList) === '[object NodeList]';
+});
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _judgeBasic_isPromise__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4);
+
+/**
+ * function to promise
+ * @param normalFunction
+ * @param timeout
+ * @returns {Promise<any>}
+ */
+
+/* harmony default export */ __webpack_exports__["default"] = (function (normalFunction, timeout) {
+  if (timeout === void 0) {
+    timeout = 0;
+  }
+
+  if (Object(_judgeBasic_isPromise__WEBPACK_IMPORTED_MODULE_0__["default"])(normalFunction)) {
+    return normalFunction;
+  }
+
+  return new Promise(function (resolve) {
+    normalFunction();
+    setTimeout(resolve, timeout);
+  });
+});
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/**
+ * @param promise
+ * @returns {boolean}
+ */
+/* harmony default export */ __webpack_exports__["default"] = (function (promise) {
+  return Object.prototype.toString.call(promise).slice(8, -1) === 'Promise';
 });
 
 /***/ })

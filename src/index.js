@@ -1,4 +1,5 @@
 import nodeListToArray from 'awesome-js-funcs/typeConversion/nodeListToArray';
+import functionToPromise from 'awesome-js-funcs/typeConversion/functionToPromise';
 
 const sHidden = 'visibility: hidden;';
 const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
@@ -49,20 +50,24 @@ export default class SwiperAnimation {
           ...nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')),
         ];
 
-        const runAnimations = this.activeBoxes.map(el => new Promise(resolve => {
-          el.style.visibility = 'visible';
+        const runAnimations = this.activeBoxes.map(el => {
+          if (!el.__animationData) {
+            return Promise.resolve();
+          }
 
-          el.style.cssText += ' animation-duration:' + el.__animationData.duration
-            + '; -webkit-animation-duration:' + el.__animationData.duration
-            + '; animation-delay:' + el.__animationData.delay
-            + '; -webkit-animation-delay:' + el.__animationData.delay
-            + ';';
+          return functionToPromise(() => {
+            el.style.visibility = 'visible';
 
-          el.classList.add(el.__animationData.effect, 'animated');
-          el.__animationData.isRecovery = false;
+            el.style.cssText += ' animation-duration:' + el.__animationData.duration
+              + '; -webkit-animation-duration:' + el.__animationData.duration
+              + '; animation-delay:' + el.__animationData.delay
+              + '; -webkit-animation-delay:' + el.__animationData.delay
+              + ';';
 
-          setTimeout(resolve, 0);
-        }));
+            el.classList.add(el.__animationData.effect, 'animated');
+            el.__animationData.isRecovery = false;
+          })
+        });
 
         return Promise.all(runAnimations);
       });
@@ -78,7 +83,7 @@ export default class SwiperAnimation {
         return Promise.resolve();
       }
 
-      return new Promise(resolve => {
+      return functionToPromise(() => {
         el.style.cssText = el.styleCache;
         el.style.visibility = 'visible';
         el.style.cssText += ' animation-duration:' + el.__animationData.outDuration
@@ -86,9 +91,7 @@ export default class SwiperAnimation {
           + ';';
 
         el.classList.add(el.__animationData.outEffect, 'animated');
-
-        setTimeout(resolve, 500);
-      });
+      }, 500);
     });
 
     return Promise.all(_runOutTasks)
@@ -104,7 +107,7 @@ export default class SwiperAnimation {
         return Promise.resolve();
       }
 
-      return new Promise(resolve => {
+      return functionToPromise(() => {
         // recovery
         el.style.cssText = el.__animationData.styleCache;
 
@@ -117,8 +120,7 @@ export default class SwiperAnimation {
         );
 
         el.__animationData.isRecovery = true;
-        setTimeout(resolve, 0);
-      })
+      });
     });
 
     return Promise.all(_runClearTasks)
@@ -141,7 +143,7 @@ export default class SwiperAnimation {
       .then(() => this._initAllBoxes())
       .then(() => {
         const _runCacheTasks = this.allBoxes
-          .map(el => new Promise(resolve => {
+          .map(el => functionToPromise(() => {
             el.__animationData = {
               styleCache: el.attributes['style']
                 ? sHidden + el.style.cssText
@@ -156,8 +158,6 @@ export default class SwiperAnimation {
             };
 
             el.style.cssText = el.__animationData.styleCache;
-
-            setTimeout(resolve, 0);
           }));
 
         return Promise.all(_runCacheTasks);
@@ -174,7 +174,7 @@ export default class SwiperAnimation {
       return Promise.resolve();
     }
 
-    return new Promise(resolve => {
+    return functionToPromise(() => {
       let swiperWrapper = null;
 
       if (this.swiper.wrapperEl) {
@@ -189,8 +189,6 @@ export default class SwiperAnimation {
         ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation]')),
         ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]')),
       ];
-
-      setTimeout(resolve, 0);
     });
   };
 
