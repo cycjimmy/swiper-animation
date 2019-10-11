@@ -1,5 +1,5 @@
-import nodeListToArray from 'awesome-js-funcs/typeConversion/nodeListToArray';
-import functionToPromise from 'awesome-js-funcs/typeConversion/functionToPromise';
+import nodeListToArray from '@cycjimmy/awesome-js-funcs/typeConversion/nodeListToArray';
+import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
 const sHidden = 'visibility: hidden;';
 const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';

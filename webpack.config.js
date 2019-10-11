@@ -23,9 +23,9 @@ const config = {
     path: IS_DEVELOPMENT
       ? path.resolve('dist')
       : path.resolve('build'),
-    filename: IS_PRODUCTION
-      ? packageJson.name + '.min.js'
-      : packageJson.name + '.js',
+    filename: packageJson.name.replace(/^.+\//g, '') + (() => IS_PRODUCTION
+      ? '.min.js'
+      : '.js')(),
     library: 'SwiperAnimation',
     libraryTarget: 'umd',
     libraryExport: 'default'
@@ -45,9 +45,6 @@ const config = {
       {
         test: /\.js$/,
         type: 'javascript/auto',
-        include: [
-          path.resolve('src'),
-        ],
         loader: 'babel-loader'
       },
 
