@@ -1,3 +1,15 @@
+# [4.0.0](https://github.com/cycjimmy/swiper-animation/compare/v3.1.1...v4.0.0) (2019-10-30)
+
+
+### Features
+
+* use rollup refactor project ([e3c5ce3](https://github.com/cycjimmy/swiper-animation/commit/e3c5ce30008866b83bd7fcac37302d2e4b6337a6))
+
+
+### BREAKING CHANGES
+
+* Use rollup refactor project. Support esm module.
+
 ## [3.1.1](https://github.com/cycjimmy/swiper-animation/compare/v3.1.0...v3.1.1) (2019-10-24)
 
 
