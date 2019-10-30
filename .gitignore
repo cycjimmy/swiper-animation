@@ -49,11 +49,13 @@ Temporary Items
 # IDE
 .idea
 
-# nodejs
+# node
 node_modules/
-npm-debug.log
-yarn-error.log
+*.log
 
 # project
-.publish
-dist
+.publish/
+dist/
+temp/
+coverage
+

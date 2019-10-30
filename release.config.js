@@ -1,10 +1,10 @@
 const makeCommonConfig = require('@cycjimmy/config-lib/semanticRelease/15.x/makeCommonConfig');
 
+const pkg = require('./package.json');
+
 module.exports = makeCommonConfig({
   githubOptions: {
-    "assets": [
-      "build/swiper-animation.min.js"
-    ]
+    assets: [pkg.browser]
   },
   exec: true,
   execOptions: {

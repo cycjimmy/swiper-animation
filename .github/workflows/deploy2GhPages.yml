@@ -14,5 +14,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BRANCH: gh-pages
-          FOLDER: dist
-          BUILD_SCRIPT: npm ci && npm run build:dev
+          FOLDER: .publish
+          BUILD_SCRIPT: npm ci && npm run build:deployment

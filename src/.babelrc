@@ -3,7 +3,6 @@
     [
       "@babel/preset-env",
       {
-        "loose": true,
         "modules": false
       }
     ]
@@ -19,8 +18,5 @@
   },
   "plugins": [
     "@babel/plugin-syntax-dynamic-import"
-  ],
-  "ignore": [
-    "node_modules"
   ]
 }

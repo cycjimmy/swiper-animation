@@ -12,7 +12,7 @@ export default class SwiperAnimation {
 
     this.appendedPromise = false;
     this.isPromiseReady = false;
-  };
+  }
 
   init(swiper) {
     if (!this.swiper) {
@@ -29,7 +29,7 @@ export default class SwiperAnimation {
       this.isPromiseReady = true;
     });
     return this;
-  };
+  }
 
   /**
    * run animations
@@ -46,86 +46,83 @@ export default class SwiperAnimation {
       .then(() => this._clear())
       .then(() => {
         this.activeBoxes = [
-          ...nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')),
-          ...nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')),
+          ...nodeListToArray(
+            this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')
+          ),
+          ...nodeListToArray(
+            this.swiper.slides[this.swiper.activeIndex].querySelectorAll(
+              '[data-swiper-animation-once]'
+            )
+          )
         ];
 
-        const runAnimations = this.activeBoxes.map(el => {
-          if (!el.__animationData) {
+        const runAnimations = this.activeBoxes.map((el) => {
+          if (!el.animationData) {
             return Promise.resolve();
           }
 
           return functionToPromise(() => {
             el.style.visibility = 'visible';
 
-            el.style.cssText += ' animation-duration:' + el.__animationData.duration
-              + '; -webkit-animation-duration:' + el.__animationData.duration
-              + '; animation-delay:' + el.__animationData.delay
-              + '; -webkit-animation-delay:' + el.__animationData.delay
-              + ';';
+            el.style.cssText += ` animation-duration:${el.animationData.duration}; -webkit-animation-duration:${el.animationData.duration}; animation-delay:${el.animationData.delay}; -webkit-animation-delay:${el.animationData.delay};`;
 
-            el.classList.add(el.__animationData.effect, 'animated');
-            el.__animationData.isRecovery = false;
-          })
+            el.classList.add(el.animationData.effect, 'animated');
+            el.animationData.isRecovery = false;
+          });
         });
 
         return Promise.all(runAnimations);
       });
-  };
+  }
 
   _outAnimate() {
-    const _runOutTasks = this.activeBoxes.map(el => {
-      if (el.__animationData.isRecovery) {
+    const runOutTasks = this.activeBoxes.map((el) => {
+      if (el.animationData.isRecovery) {
         return Promise.resolve();
       }
 
-      if (!el.__animationData.outEffect) {
+      if (!el.animationData.outEffect) {
         return Promise.resolve();
       }
 
       return functionToPromise(() => {
         el.style.cssText = el.styleCache;
         el.style.visibility = 'visible';
-        el.style.cssText += ' animation-duration:' + el.__animationData.outDuration
-          + '; -webkit-animation-duration:' + el.__animationData.outDuration
-          + ';';
+        el.style.cssText += ` animation-duration:${el.animationData.outDuration}; -webkit-animation-duration:${el.animationData.outDuration};`;
 
-        el.classList.add(el.__animationData.outEffect, 'animated');
+        el.classList.add(el.animationData.outEffect, 'animated');
       }, 500);
     });
 
-    return Promise.all(_runOutTasks)
-  };
+    return Promise.all(runOutTasks);
+  }
 
   _clear() {
-    const _runClearTasks = this.activeBoxes.map(el => {
-      if (el.__animationData.isRecovery) {
+    const runClearTasks = this.activeBoxes.map((el) => {
+      if (el.animationData.isRecovery) {
         return Promise.resolve();
       }
 
-      if (el.__animationData.runOnce) {
+      if (el.animationData.runOnce) {
         return Promise.resolve();
       }
 
       return functionToPromise(() => {
         // recovery
-        el.style.cssText = el.__animationData.styleCache;
+        el.style.cssText = el.animationData.styleCache;
 
         el.classList.remove(
-          ...[
-            el.__animationData.effect,
-            el.__animationData.outEffect,
-            'animated',
-          ].filter(str => !!str)
+          ...[el.animationData.effect, el.animationData.outEffect, 'animated'].filter(
+            (str) => !!str
+          )
         );
 
-        el.__animationData.isRecovery = true;
+        el.animationData.isRecovery = true;
       });
     });
 
-    return Promise.all(_runClearTasks)
-      .then(() => this.activeBoxes = []);
-  };
+    return Promise.all(runClearTasks).then(() => (this.activeBoxes = []));
+  }
 
   /**
    * cache allBoxes style
@@ -142,27 +139,26 @@ export default class SwiperAnimation {
     return Promise.resolve()
       .then(() => this._initAllBoxes())
       .then(() => {
-        const _runCacheTasks = this.allBoxes
-          .map(el => functionToPromise(() => {
-            el.__animationData = {
-              styleCache: el.attributes['style']
-                ? sHidden + el.style.cssText
-                : sHidden,
+        const runCacheTasks = this.allBoxes.map((el) =>
+          functionToPromise(() => {
+            el.animationData = {
+              styleCache: el.attributes.style ? sHidden + el.style.cssText : sHidden,
               effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || '',
               duration: el.dataset.duration || '.5s',
               delay: el.dataset.delay || '.5s',
               outEffect: el.dataset.swiperOutAnimation || '',
               outDuration: el.dataset.outDuration || '.5s',
               isRecovery: true,
-              runOnce: !!(el.dataset.swiperAnimationOnce),
+              runOnce: !!el.dataset.swiperAnimationOnce
             };
 
-            el.style.cssText = el.__animationData.styleCache;
-          }));
+            el.style.cssText = el.animationData.styleCache;
+          })
+        );
 
-        return Promise.all(_runCacheTasks);
+        return Promise.all(runCacheTasks);
       });
-  };
+  }
 
   /**
    * init this.allBoxes
@@ -187,18 +183,17 @@ export default class SwiperAnimation {
 
       this.allBoxes = [
         ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation]')),
-        ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]')),
+        ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]'))
       ];
     });
-  };
+  }
 
   /**
    * init PromisePolyfill
    * @param callback
    * @private
    */
-  _initPromisePolyfill(callback = () => {
-  }) {
+  _initPromisePolyfill(callback = () => {}) {
     // just add promise-polyfill script once
     if (this.appendedPromise) {
       return;
@@ -210,5 +205,5 @@ export default class SwiperAnimation {
     oScript.src = PROMISE_POLYFILL_URL;
     document.querySelector('head').appendChild(oScript);
     this.appendedPromise = true;
-  };
-};
+  }
+}

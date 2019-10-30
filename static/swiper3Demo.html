@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link rel="shortcut icon" href="./favicon.ico">
+  <title>Swiper Animation Demo for Swiper3</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/swiper@3/dist/css/swiper.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/animate.css@latest/animate.min.css" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .swiper-container {
+      width: 400px;
+      height: 300px;
+      background-color: #fff1c9;
+    }
+
+    .demo {
+      width: 400px;
+      height: 300px;
+      line-height: 300px;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide" data-hash="slide1">
+      <div class="demo"
+           data-swiper-animation="zoomIn"
+           data-swiper-out-animation="zoomOut">Slider1
+      </div>
+    </div>
+
+    <div class="swiper-slide" data-hash="slide2">
+      <div class="demo"
+           data-swiper-animation-once="fadeIn"
+           data-duration=".5s"
+           data-delay=".5s">Slider2
+      </div>
+    </div>
+
+    <div class="swiper-slide" data-hash="slide3">
+      <div class="demo"
+           data-swiper-animation="fadeIn"
+           data-duration=".5s"
+           data-delay=".5s">Slider3
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@3/dist/js/swiper.min.js"></script>
+<script src="./swiper-animation.umd.js"></script>
+
+<script>
+  var swiperAnimation = new SwiperAnimation();
+
+  var mySwiper = new Swiper('.swiper-container', {
+    hashnav: true,
+    hashnavWatchState: true,
+    replaceState: true,
+    onInit: function (swiper) {
+      swiperAnimation.init(swiper).animate();
+    },
+    onSlideChangeEnd: function (swiper) {
+      swiperAnimation.init(swiper).animate();
+    }
+  });
+
+  console.log(mySwiper);
+</script>
+</body>
+</html>
