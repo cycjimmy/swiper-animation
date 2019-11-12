@@ -1,8 +1,4 @@
 # Swiper Animation
-[![NPM version][npm-image]][npm-url]
-[![NPM bundle size][npm-bundle-size-image]][npm-url]
-[![npm download][download-image]][download-url]
-[![jsdelivr][jsdelivr-image]][jsdelivr-url]
 ![][workflows-badge-image]
 [![build status][travis-image]][travis-url]
 [![libraries dependency status][libraries-status-image]][libraries-status-url]
@@ -18,6 +14,10 @@
 * **[swiper-animation](https://github.com/cycdpo/swiper-animation) has been renamed to @cycjimmy/swiper-animation for scoped NPM package.**
 
 ## Install
+[![NPM version][npm-image]][npm-url]
+[![NPM bundle size][npm-bundle-size-image]][npm-url]
+[![npm download][download-image]][download-url]
+
 ```shell
 # via npm
 $ npm install @cycjimmy/swiper-animation --save
@@ -132,6 +132,8 @@ const mySwiper4 = new Swiper('.swiper-container', {
 ```
 
 ## CDN
+[![jsdelivr][jsdelivr-image]][jsdelivr-url]
+
 To use via a CDN include this in your HTML:
 ```text
 <script src="https://cdn.jsdelivr.net/npm/@cycjimmy/swiper-animation@4/dist/swiper-animation.umd.min.js"></script>
