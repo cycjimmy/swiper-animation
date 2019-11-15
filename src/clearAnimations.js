@@ -2,11 +2,11 @@ import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functio
 
 /**
  * clearAnimations
- * @param activeBoxes[HtmlElement]
+ * @param activeElements[HTMLElement]
  * @returns {Promise<unknown[]>}
  */
-export default (activeBoxes) => {
-  const runClearTasks = activeBoxes.map((el) => {
+export default (activeElements) => {
+  const runClearTasks = activeElements.map((el) => {
     if (el.animationData.isRecovery) {
       return Promise.resolve();
     }

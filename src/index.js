@@ -2,6 +2,7 @@ import nodeListToArray from '@cycjimmy/awesome-js-funcs/typeConversion/nodeListT
 import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
 import { isPromiseReady, promisePolyfill } from './tools';
+import runAnimations from './runAnimations';
 import clearAnimations from './clearAnimations';
 
 const sHidden = 'visibility: hidden;';
@@ -42,35 +43,7 @@ export default class {
       .then(() => this._cache())
       .then(() => this._outAnimate())
       .then(() => this._clear())
-      .then(() => {
-        this.activeBoxes = [
-          ...nodeListToArray(
-            this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')
-          ),
-          ...nodeListToArray(
-            this.swiper.slides[this.swiper.activeIndex].querySelectorAll(
-              '[data-swiper-animation-once]'
-            )
-          )
-        ];
-
-        const runAnimations = this.activeBoxes.map((el) => {
-          if (!el.animationData) {
-            return Promise.resolve();
-          }
-
-          return functionToPromise(() => {
-            el.style.visibility = 'visible';
-
-            el.style.cssText += ` animation-duration:${el.animationData.duration}; -webkit-animation-duration:${el.animationData.duration}; animation-delay:${el.animationData.delay}; -webkit-animation-delay:${el.animationData.delay};`;
-
-            el.classList.add(el.animationData.effect, 'animated');
-            el.animationData.isRecovery = false;
-          });
-        });
-
-        return Promise.all(runAnimations);
-      });
+      .then(() => runAnimations(this._updateActiveBoxes()));
   }
 
   _outAnimate() {
@@ -95,6 +68,11 @@ export default class {
     return Promise.all(runOutTasks);
   }
 
+  /**
+   * clearAnimations
+   * @returns {Promise<Array>}
+   * @private
+   */
   _clear() {
     return clearAnimations(this.activeBoxes).then(() => (this.activeBoxes = []));
   }
@@ -161,5 +139,23 @@ export default class {
         ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]'))
       ];
     });
+  }
+
+  /**
+   * update activeBoxes
+   * @returns {[]|*[]|*}
+   * @private
+   */
+  _updateActiveBoxes() {
+    this.activeBoxes = [
+      ...nodeListToArray(
+        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')
+      ),
+      ...nodeListToArray(
+        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')
+      )
+    ];
+
+    return this.activeBoxes;
   }
 }
