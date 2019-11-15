@@ -1,33 +1,31 @@
 import nodeListToArray from '@cycjimmy/awesome-js-funcs/typeConversion/nodeListToArray';
 import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
-const sHidden = 'visibility: hidden;';
-const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js';
+import { isPromiseReady, promisePolyfill } from './tools';
+import clearAnimations from './clearAnimations';
 
-export default class SwiperAnimation {
+const sHidden = 'visibility: hidden;';
+
+export default class {
   constructor() {
     this.swiper = null;
     this.allBoxes = [];
     this.activeBoxes = [];
 
-    this.appendedPromise = false;
-    this.isPromiseReady = false;
+    if (!isPromiseReady()) {
+      promisePolyfill();
+    }
   }
 
+  /**
+   * init
+   * @param swiper
+   */
   init(swiper) {
     if (!this.swiper) {
       this.swiper = swiper;
     }
 
-    if (this.isPromiseReady || window.Promise) {
-      this.isPromiseReady = true;
-      return this;
-    }
-
-    // fix "Promise Is Undefined" in IE
-    this._initPromisePolyfill(() => {
-      this.isPromiseReady = true;
-    });
     return this;
   }
 
@@ -36,7 +34,7 @@ export default class SwiperAnimation {
    * @return {*}
    */
   animate() {
-    if (!this.isPromiseReady) {
+    if (!isPromiseReady()) {
       return setTimeout(() => this.animate(), 5e2);
     }
 
@@ -98,30 +96,7 @@ export default class SwiperAnimation {
   }
 
   _clear() {
-    const runClearTasks = this.activeBoxes.map((el) => {
-      if (el.animationData.isRecovery) {
-        return Promise.resolve();
-      }
-
-      if (el.animationData.runOnce) {
-        return Promise.resolve();
-      }
-
-      return functionToPromise(() => {
-        // recovery
-        el.style.cssText = el.animationData.styleCache;
-
-        el.classList.remove(
-          ...[el.animationData.effect, el.animationData.outEffect, 'animated'].filter(
-            (str) => !!str
-          )
-        );
-
-        el.animationData.isRecovery = true;
-      });
-    });
-
-    return Promise.all(runClearTasks).then(() => (this.activeBoxes = []));
+    return clearAnimations(this.activeBoxes).then(() => (this.activeBoxes = []));
   }
 
   /**
@@ -186,24 +161,5 @@ export default class SwiperAnimation {
         ...nodeListToArray(swiperWrapper.querySelectorAll('[data-swiper-animation-once]'))
       ];
     });
-  }
-
-  /**
-   * init PromisePolyfill
-   * @param callback
-   * @private
-   */
-  _initPromisePolyfill(callback = () => {}) {
-    // just add promise-polyfill script once
-    if (this.appendedPromise) {
-      return;
-    }
-
-    const oScript = document.createElement('script');
-    oScript.type = 'text/javascript';
-    oScript.onload = () => callback();
-    oScript.src = PROMISE_POLYFILL_URL;
-    document.querySelector('head').appendChild(oScript);
-    this.appendedPromise = true;
   }
 }
