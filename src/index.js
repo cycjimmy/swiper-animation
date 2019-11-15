@@ -2,7 +2,7 @@ import nodeListToArray from '@cycjimmy/awesome-js-funcs/typeConversion/nodeListT
 import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
 const sHidden = 'visibility: hidden;';
-const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js';
+const PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js';
 
 export default class SwiperAnimation {
   constructor() {

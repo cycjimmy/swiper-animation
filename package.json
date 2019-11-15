@@ -38,12 +38,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@cycjimmy/awesome-js-funcs": "^2.0.1"
+    "@cycjimmy/awesome-js-funcs": "^2.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.4",
+    "@babel/core": "^7.7.2",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-env": "^7.6.3",
+    "@babel/preset-env": "^7.7.1",
     "@cycjimmy/config-lib": "^1.5.0",
     "babel-jest": "^24.9.0",
     "coveralls": "^3.0.7",
@@ -51,7 +51,7 @@
     "eslint": "^6.6.0",
     "eslint-config-rollup": "^0.1.0",
     "jest": "^24.9.0",
-    "rollup": "^1.26.0",
+    "rollup": "^1.27.0",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-browsersync": "^1.0.0",
     "rollup-plugin-commonjs": "^10.1.0",
