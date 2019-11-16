@@ -27,5 +27,5 @@ export default (activeElements) => {
     });
   });
 
-  return Promise.all(runClearTasks);
+  return Promise.all(runClearTasks).then(() => functionToPromise(() => (activeElements = [])));
 };

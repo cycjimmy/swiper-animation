@@ -23,4 +23,3 @@ export default (activeElements) => {
 
   return Promise.all(runAnimateTasks);
 };
-
