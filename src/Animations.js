@@ -22,7 +22,7 @@ const getSwiperContainer = (swiper) => {
     return swiper.container[0];
   }
 
-  return null;
+  throw new Error('Illegal swiper instance');
 };
 
 export default class {
