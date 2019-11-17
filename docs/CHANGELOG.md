@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/cycjimmy/swiper-animation/compare/v4.0.0...v4.0.1) (2019-11-17)
+
+
+### Performance Improvements
+
+* remove unnecessary cleanups ([c1cdb43](https://github.com/cycjimmy/swiper-animation/commit/c1cdb4325e04fe259ba470ba1587a50b1a390dc5))
+
 # [4.0.0](https://github.com/cycjimmy/swiper-animation/compare/v3.1.1...v4.0.0) (2019-10-30)
 
 
