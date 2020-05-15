@@ -262,6 +262,14 @@
 
   var functionToPromise$1 = unwrapExports(functionToPromise);
 
+  var constants = {
+    /**
+     * className `animated` for Animate.css
+     * @type {string[]}
+     */
+    AnimateCssAnimated: ['animated', 'animate__animated']
+  };
+
   /**
    * runAnimations
    * @param activeElements[HTMLElement]
@@ -275,9 +283,13 @@
       }
 
       return functionToPromise$1(function () {
+        var _el$classList;
+
         el.style.visibility = 'visible';
         el.style.cssText += " animation-duration:".concat(el.animationData.duration, "; -webkit-animation-duration:").concat(el.animationData.duration, "; animation-delay:").concat(el.animationData.delay, "; -webkit-animation-delay:").concat(el.animationData.delay, ";");
-        el.classList.add(el.animationData.effect, 'animated');
+
+        (_el$classList = el.classList).add.apply(_el$classList, [el.animationData.effect].concat(_toConsumableArray(constants.AnimateCssAnimated)));
+
         el.animationData.isRecovery = false;
       });
     });
@@ -332,7 +344,7 @@
         // recovery
         el.style.cssText = el.animationData.styleCache;
 
-        (_el$classList = el.classList).remove.apply(_el$classList, _toConsumableArray([el.animationData.effect, el.animationData.outEffect, 'animated'].filter(function (str) {
+        (_el$classList = el.classList).remove.apply(_el$classList, _toConsumableArray([el.animationData.effect, el.animationData.outEffect].concat(_toConsumableArray(constants.AnimateCssAnimated)).filter(function (str) {
           return !!str;
         })));
 
