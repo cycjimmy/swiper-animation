@@ -1,3 +1,10 @@
+# [4.1.0](https://github.com/cycjimmy/swiper-animation/compare/v4.0.1...v4.1.0) (2020-05-15)
+
+
+### Features
+
+* support animate.css v4 ([2baf71d](https://github.com/cycjimmy/swiper-animation/commit/2baf71d30832ac694c30c30f844096f050fdebc6)), closes [#17](https://github.com/cycjimmy/swiper-animation/issues/17)
+
 ## [4.0.1](https://github.com/cycjimmy/swiper-animation/compare/v4.0.0...v4.0.1) (2019-11-17)
 
 
