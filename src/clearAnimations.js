@@ -1,5 +1,7 @@
 import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
+import constants from './constants';
+
 /**
  * clearAnimations
  * @param activeElements[HTMLElement]
@@ -20,7 +22,11 @@ export default (activeElements) => {
       el.style.cssText = el.animationData.styleCache;
 
       el.classList.remove(
-        ...[el.animationData.effect, el.animationData.outEffect, 'animated'].filter((str) => !!str)
+        ...[
+          el.animationData.effect,
+          el.animationData.outEffect,
+          ...constants.AnimateCssAnimated
+        ].filter((str) => !!str)
       );
 
       el.animationData.isRecovery = true;

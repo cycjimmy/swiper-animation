@@ -63,10 +63,10 @@ const mySwiper4 = new Swiper('.swiper-container', {
 ### Add attribute on elements you want animated.
 ```html
 <div 
-  data-swiper-animation="fadeIn" 
+  data-swiper-animation="animate__fadeIn" 
   data-duration=".5s" 
   data-delay="1s" 
-  data-swiper-out-animation="fadeOut"
+  data-swiper-out-animation="animate__fadeOut"
   data-out-duration=".2s"
 >Animation</div>
 ```
@@ -91,13 +91,13 @@ const mySwiper4 = new Swiper('.swiper-container', {
 <div class="swiper-container">
   <div class="swiper-wrapper">
     <div class="swiper-slide">
-      <div data-swiper-animation="fadeIn">Slider1</div>
+      <div data-swiper-animation="animate__fadeIn">Slider1</div>
     </div>
     <div class="swiper-slide">
-      <div data-swiper-animation="fadeIn" data-duration=".5s">Slider2</div>
+      <div data-swiper-animation="animate__fadeIn" data-duration=".5s">Slider2</div>
     </div>
     <div class="swiper-slide">
-      <div data-swiper-animation="fadeIn" data-duration=".5s" data-delay="1s">Slider3</div>
+      <div data-swiper-animation="animate__fadeIn" data-duration=".5s" data-delay="1s">Slider3</div>
     </div>
   </div>
 </div>

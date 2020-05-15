@@ -1,5 +1,7 @@
 import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise';
 
+import constants from './constants';
+
 /**
  * runAnimations
  * @param activeElements[HTMLElement]
@@ -16,7 +18,7 @@ export default (activeElements) => {
 
       el.style.cssText += ` animation-duration:${el.animationData.duration}; -webkit-animation-duration:${el.animationData.duration}; animation-delay:${el.animationData.delay}; -webkit-animation-delay:${el.animationData.delay};`;
 
-      el.classList.add(el.animationData.effect, 'animated');
+      el.classList.add(el.animationData.effect, ...constants.AnimateCssAnimated);
       el.animationData.isRecovery = false;
     });
   });
