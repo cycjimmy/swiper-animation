@@ -27,23 +27,36 @@
   }
 
   function _toConsumableArray(arr) {
-    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
   }
 
   function _arrayWithoutHoles(arr) {
-    if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
-
-      return arr2;
-    }
+    if (Array.isArray(arr)) return _arrayLikeToArray(arr);
   }
 
   function _iterableToArray(iter) {
-    if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
   }
 
   function _nonIterableSpread() {
-    throw new TypeError("Invalid attempt to spread non-iterable instance");
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
   var PROMISE_POLYFILL_URL = 'https://cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.min.js';
@@ -91,7 +104,7 @@
   });
   exports["default"] = void 0;
   /**
-   * 判断是否nodeList
+   * determine nodeList type
    * @param nodeList
    */
 
@@ -104,6 +117,27 @@
 
   unwrapExports(isNodeList);
 
+  var isArray = createCommonjsModule(function (module, exports) {
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports["default"] = void 0;
+  /**
+   * determine an array type
+   * @param arr
+   * @returns {boolean}
+   */
+
+  var _default = function _default(arr) {
+    return Object.prototype.toString.call(arr).slice(8, -1) === 'Array';
+  };
+
+  exports["default"] = _default;
+  });
+
+  unwrapExports(isArray);
+
   var nodeListToArray = createCommonjsModule(function (module, exports) {
 
   Object.defineProperty(exports, "__esModule", {
@@ -113,14 +147,22 @@
 
   var _isNodeList = _interopRequireDefault(isNodeList);
 
+  var _isArray = _interopRequireDefault(isArray);
+
   function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
       "default": obj
     };
   }
+  /**
+   * nodeList into array
+   * @param nodeList
+   * @returns {Array}
+   */
+
 
   var _default = function _default(nodeList) {
-    if (Array.isArray(nodeList)) {
+    if ((0, _isArray["default"])(nodeList)) {
       return nodeList;
     }
 
@@ -165,6 +207,7 @@
   });
   exports["default"] = void 0;
   /**
+   * determine a promise type
    * @param promise
    * @returns {boolean}
    */
@@ -205,7 +248,8 @@
 
     if ((0, _isPromise["default"])(normalFunction)) {
       return normalFunction;
-    }
+    } // eslint-disable-next-line no-undef
+
 
     return new Promise(function (resolve) {
       normalFunction();
@@ -319,9 +363,7 @@
     throw new Error('Illegal swiper instance');
   };
 
-  var _default =
-  /*#__PURE__*/
-  function () {
+  var _default = /*#__PURE__*/function () {
     function _default(swiper) {
       _classCallCheck(this, _default);
 
@@ -367,9 +409,7 @@
     return _default;
   }();
 
-  var _default$1 =
-  /*#__PURE__*/
-  function () {
+  var _default$1 = /*#__PURE__*/function () {
     function _default$1() {
       _classCallCheck(this, _default$1);
 
