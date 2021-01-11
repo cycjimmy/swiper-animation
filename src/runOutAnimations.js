@@ -16,7 +16,7 @@ export default (activeElements) => {
     }
 
     return functionToPromise(() => {
-      el.style.cssText = el.styleCache;
+      el.style.cssText = el.animationData.styleCache;
       el.style.visibility = 'visible';
       el.style.cssText += ` animation-duration:${el.animationData.outDuration}; -webkit-animation-duration:${el.animationData.outDuration};`;
 
