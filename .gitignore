@@ -55,7 +55,6 @@ node_modules/
 
 # project
 .publish/
-dist/
 temp/
 coverage
 
