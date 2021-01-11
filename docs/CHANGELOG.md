@@ -1,3 +1,10 @@
+## [4.1.1](https://github.com/cycjimmy/swiper-animation/compare/v4.1.0...v4.1.1) (2021-01-11)
+
+
+### Bug Fixes
+
+* restore the element style on the out animation ([c883167](https://github.com/cycjimmy/swiper-animation/commit/c883167147aff9ea67a1cfbd4d9c2ce739f7b39b))
+
 # [4.1.0](https://github.com/cycjimmy/swiper-animation/compare/v4.0.1...v4.1.0) (2020-05-15)
 
 
