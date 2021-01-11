@@ -313,7 +313,7 @@
       }
 
       return functionToPromise$1(function () {
-        el.style.cssText = el.styleCache;
+        el.style.cssText = el.animationData.styleCache;
         el.style.visibility = 'visible';
         el.style.cssText += " animation-duration:".concat(el.animationData.outDuration, "; -webkit-animation-duration:").concat(el.animationData.outDuration, ";");
         el.classList.add(el.animationData.outEffect, 'animated');
