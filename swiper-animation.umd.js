@@ -1,7 +1,7 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.SwiperAnimation = factory());
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.SwiperAnimation = factory());
 }(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
@@ -35,7 +35,7 @@
   }
 
   function _iterableToArray(iter) {
-    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+    if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter);
   }
 
   function _unsupportedIterableToArray(o, minLen) {
@@ -89,15 +89,15 @@
     appendedPromisePolyfill = true;
   };
 
-  function unwrapExports (x) {
+  function getDefaultExportFromCjs (x) {
   	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
   }
 
-  function createCommonjsModule(fn, module) {
-  	return module = { exports: {} }, fn(module, module.exports), module.exports;
-  }
+  var nodeListToArray$1 = {};
 
-  var isNodeList = createCommonjsModule(function (module, exports) {
+  var isNodeList = {};
+
+  (function (exports) {
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -113,11 +113,11 @@
   };
 
   exports["default"] = _default;
-  });
+  }(isNodeList));
 
-  unwrapExports(isNodeList);
+  var isArray = {};
 
-  var isArray = createCommonjsModule(function (module, exports) {
+  (function (exports) {
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -134,11 +134,9 @@
   };
 
   exports["default"] = _default;
-  });
+  }(isArray));
 
-  unwrapExports(isArray);
-
-  var nodeListToArray = createCommonjsModule(function (module, exports) {
+  (function (exports) {
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -174,9 +172,9 @@
   };
 
   exports["default"] = _default;
-  });
+  }(nodeListToArray$1));
 
-  var nodeListToArray$1 = unwrapExports(nodeListToArray);
+  var nodeListToArray = /*@__PURE__*/getDefaultExportFromCjs(nodeListToArray$1);
 
   var sHidden = 'visibility: hidden;';
   /**
@@ -200,7 +198,11 @@
     });
   });
 
-  var isPromise = createCommonjsModule(function (module, exports) {
+  var functionToPromise$1 = {};
+
+  var isPromise = {};
+
+  (function (exports) {
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -217,11 +219,9 @@
   };
 
   exports["default"] = _default;
-  });
+  }(isPromise));
 
-  unwrapExports(isPromise);
-
-  var functionToPromise = createCommonjsModule(function (module, exports) {
+  (function (exports) {
 
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -258,9 +258,9 @@
   };
 
   exports["default"] = _default;
-  });
+  }(functionToPromise$1));
 
-  var functionToPromise$1 = unwrapExports(functionToPromise);
+  var functionToPromise = /*@__PURE__*/getDefaultExportFromCjs(functionToPromise$1);
 
   var constants = {
     /**
@@ -282,7 +282,7 @@
         return Promise.resolve();
       }
 
-      return functionToPromise$1(function () {
+      return functionToPromise(function () {
         var _el$classList;
 
         el.style.visibility = 'visible';
@@ -312,7 +312,7 @@
         return Promise.resolve();
       }
 
-      return functionToPromise$1(function () {
+      return functionToPromise(function () {
         el.style.cssText = el.animationData.styleCache;
         el.style.visibility = 'visible';
         el.style.cssText += " animation-duration:".concat(el.animationData.outDuration, "; -webkit-animation-duration:").concat(el.animationData.outDuration, ";");
@@ -338,7 +338,7 @@
         return Promise.resolve();
       }
 
-      return functionToPromise$1(function () {
+      return functionToPromise(function () {
         var _el$classList;
 
         // recovery
@@ -375,13 +375,13 @@
     throw new Error('Illegal swiper instance');
   };
 
-  var _default = /*#__PURE__*/function () {
+  var _default$1 = /*#__PURE__*/function () {
     function _default(swiper) {
       _classCallCheck(this, _default);
 
       this.swiper = swiper;
       this.container = getSwiperContainer(this.swiper);
-      this.animationElements = [].concat(_toConsumableArray(nodeListToArray$1(this.container.querySelectorAll('[data-swiper-animation]'))), _toConsumableArray(nodeListToArray$1(this.container.querySelectorAll('[data-swiper-animation-once]'))));
+      this.animationElements = [].concat(_toConsumableArray(nodeListToArray(this.container.querySelectorAll('[data-swiper-animation]'))), _toConsumableArray(nodeListToArray(this.container.querySelectorAll('[data-swiper-animation-once]'))));
       this.activeElements = [];
       cacheAnimations(this.animationElements);
     }
@@ -413,7 +413,7 @@
     }, {
       key: "_updateActiveElements",
       value: function _updateActiveElements() {
-        this.activeElements = [].concat(_toConsumableArray(nodeListToArray$1(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'))), _toConsumableArray(nodeListToArray$1(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]'))));
+        this.activeElements = [].concat(_toConsumableArray(nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'))), _toConsumableArray(nodeListToArray(this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]'))));
         return this.activeElements;
       }
     }]);
@@ -421,9 +421,9 @@
     return _default;
   }();
 
-  var _default$1 = /*#__PURE__*/function () {
-    function _default$1() {
-      _classCallCheck(this, _default$1);
+  var _default = /*#__PURE__*/function () {
+    function _default() {
+      _classCallCheck(this, _default);
 
       this.animations = null;
 
@@ -437,11 +437,11 @@
      */
 
 
-    _createClass(_default$1, [{
+    _createClass(_default, [{
       key: "init",
       value: function init(swiper) {
         if (!this.animations) {
-          this.animations = new _default(swiper);
+          this.animations = new _default$1(swiper);
         }
 
         return this;
@@ -466,9 +466,9 @@
       }
     }]);
 
-    return _default$1;
+    return _default;
   }();
 
-  return _default$1;
+  return _default;
 
 })));
