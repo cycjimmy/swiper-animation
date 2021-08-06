@@ -1,3 +1,10 @@
+## [4.1.2](https://github.com/cycjimmy/swiper-animation/compare/v4.1.1...v4.1.2) (2021-08-06)
+
+
+### Bug Fixes
+
+* **dependencies:** upgrade dependencies ([61d9217](https://github.com/cycjimmy/swiper-animation/commit/61d9217b0fa777b770f25c0c141af7f7bcd9fb7c))
+
 ## [4.1.1](https://github.com/cycjimmy/swiper-animation/compare/v4.1.0...v4.1.1) (2021-01-11)
 
 
