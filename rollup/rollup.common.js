@@ -26,7 +26,7 @@ export const plugins = [
     exclude: ['**/*.(css|scss)']
   }),
   resolve(),
-  babel(),
+  babel({ babelHelpers: 'bundled' }),
   commonjs()
 ];
 
