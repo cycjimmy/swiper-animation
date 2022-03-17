@@ -1,6 +1,5 @@
 # Swiper Animation
 ![][workflows-badge-image]
-[![build status][travis-image]][travis-url]
 [![libraries dependency status][libraries-status-image]][libraries-status-url]
 [![libraries sourcerank][libraries-sourcerank-image]][libraries-sourcerank-url]
 [![Coverage Status][coverage-image]][coverage-url]
@@ -140,7 +139,7 @@ To use via a CDN include this in your HTML:
 ```
 
 ## Earlier Version
-* [1.x](https://github.com/cycdpo/swiper-animation/tree/1.x)
+* [v1](https://github.com/cycdpo/swiper-animation/tree/v1)
 
 <!-- Links: -->
 [npm-image]: https://img.shields.io/npm/v/@cycjimmy/swiper-animation
@@ -154,8 +153,6 @@ To use via a CDN include this in your HTML:
 [jsdelivr-url]: https://www.jsdelivr.com/package/npm/@cycjimmy/swiper-animation
 
 [workflows-badge-image]: https://github.com/cycjimmy/swiper-animation/workflows/Test%20CI/badge.svg
-[travis-image]: https://img.shields.io/travis/cycjimmy/swiper-animation
-[travis-url]: https://travis-ci.org/cycjimmy/swiper-animation
 
 [libraries-status-image]: https://img.shields.io/librariesio/release/npm/@cycjimmy/swiper-animation
 [libraries-sourcerank-image]: https://img.shields.io/librariesio/sourcerank/npm/@cycjimmy/swiper-animation
