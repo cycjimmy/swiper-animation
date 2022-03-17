@@ -35,7 +35,7 @@ If applicable, add screenshots to help explain your problem.
  - Version [e.g. 22]
 
 **Online demo**
-If applicable,  provide an online demo to help explain your problem.
+If applicable, provide an online demo to help explain your problem.
 
 **Additional context**
 Add any other context about the problem here.

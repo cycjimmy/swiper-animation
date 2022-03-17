@@ -5,13 +5,16 @@ on:
     branches:
       - master
 jobs:
-  deploy-gh-pages:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          persist-credentials: false
+          node-version: '16'
 
       - name: Pre-built
         run: |
@@ -19,8 +22,8 @@ jobs:
           npm run build:deployment
 
       - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@releases/v4
         with:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: .publish
+          branch: gh-pages
+          folder: .publish
+          token: ${{ secrets.ACCESS_TOKEN }}
