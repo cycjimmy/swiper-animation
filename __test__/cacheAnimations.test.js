@@ -1,3 +1,4 @@
+/* eslint no-undef: off */
 import cacheAnimations from '../src/cacheAnimations';
 
 describe('cacheAnimations default test', () => {

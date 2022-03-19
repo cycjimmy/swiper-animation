@@ -14,7 +14,7 @@ export default (elements) => {
       outEffect: el.dataset.swiperOutAnimation || '',
       outDuration: el.dataset.outDuration || '.5s',
       isRecovery: true,
-      runOnce: !!el.dataset.swiperAnimationOnce
+      runOnce: !!el.dataset.swiperAnimationOnce,
     };
 
     el.style.cssText = el.animationData.styleCache;

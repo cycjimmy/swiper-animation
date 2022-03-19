@@ -1,4 +1,4 @@
-import functionToPromise from '@cycjimmy/awesome-js-funcs/cjs/typeConversion/functionToPromise';
+import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise';
 
 import constants from './constants';
 
@@ -25,8 +25,8 @@ export default (activeElements) => {
         ...[
           el.animationData.effect,
           el.animationData.outEffect,
-          ...constants.AnimateCssAnimated
-        ].filter((str) => !!str)
+          ...constants.AnimateCssAnimated,
+        ].filter((str) => !!str),
       );
 
       el.animationData.isRecovery = true;

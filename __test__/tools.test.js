@@ -1,3 +1,4 @@
+/* eslint no-undef: off */
 import { isPromiseReady, promisePolyfill } from '../src/tools';
 
 describe('Tools test', () => {
