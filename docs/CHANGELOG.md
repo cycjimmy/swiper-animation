@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/cycjimmy/swiper-animation/compare/v4.1.2...v5.0.0) (2022-03-19)
+
+
+### Features
+
+* change to module mode ([8349734](https://github.com/cycjimmy/swiper-animation/commit/83497345d803a01832bda109df97f62c2d860f87))
+
+
+### BREAKING CHANGES
+
+* change to module mode
+
 ## [4.1.2](https://github.com/cycjimmy/swiper-animation/compare/v4.1.1...v4.1.2) (2021-08-06)
 
 
