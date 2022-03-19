@@ -1,3 +1,4 @@
+/* eslint no-undef: off */
 import cacheAnimations from '../src/cacheAnimations';
 import runAnimations from '../src/runAnimations';
 
@@ -8,10 +9,9 @@ describe('runAnimations default test', () => {
   testEl.dataset.swiperAnimation = swiperAnimation;
   const activeElements = [testEl];
 
-  it('clearAnimations test when animationData is undefined', () =>
-    runAnimations(activeElements).then(() => {
-      expect(testEl.classList.contains(swiperAnimation)).toBe(false);
-    }));
+  it('clearAnimations test when animationData is undefined', () => runAnimations(activeElements).then(() => {
+    expect(testEl.classList.contains(swiperAnimation)).toBe(false);
+  }));
 
   it('clearAnimations default test', () => {
     cacheAnimations(activeElements);

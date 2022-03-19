@@ -1,4 +1,4 @@
-import nodeListToArray from '@cycjimmy/awesome-js-funcs/cjs/typeConversion/nodeListToArray';
+import nodeListToArray from '@cycjimmy/awesome-js-funcs/esm/typeConversion/nodeListToArray';
 
 import cacheAnimations from './cacheAnimations';
 import runAnimations from './runAnimations';
@@ -31,7 +31,7 @@ export default class {
     this.container = getSwiperContainer(this.swiper);
     this.animationElements = [
       ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation]')),
-      ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation-once]'))
+      ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation-once]')),
     ];
     this.activeElements = [];
 
@@ -57,11 +57,11 @@ export default class {
   _updateActiveElements() {
     this.activeElements = [
       ...nodeListToArray(
-        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]')
+        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'),
       ),
       ...nodeListToArray(
-        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]')
-      )
+        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]'),
+      ),
     ];
 
     return this.activeElements;

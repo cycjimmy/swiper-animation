@@ -1,3 +1,4 @@
+/* eslint no-undef: off */
 import Swiper from 'swiper';
 
 import Animations from '../src/Animations';

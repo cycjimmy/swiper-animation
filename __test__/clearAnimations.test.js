@@ -1,3 +1,4 @@
+/* eslint no-undef: off */
 import cacheAnimations from '../src/cacheAnimations';
 import clearAnimations from '../src/clearAnimations';
 
@@ -11,10 +12,9 @@ describe('clearAnimations default test', () => {
   const activeElements = [testEl01, testEl02];
   cacheAnimations(activeElements);
 
-  it('clearAnimations default test', () =>
-    clearAnimations(activeElements).then(() => {
-      expect(testEl01.animationData.isRecovery).toBe(true);
-    }));
+  it('clearAnimations default test', () => clearAnimations(activeElements).then(() => {
+    expect(testEl01.animationData.isRecovery).toBe(true);
+  }));
 
   it('clearAnimations test', () => {
     activeElements.forEach((el) => {
