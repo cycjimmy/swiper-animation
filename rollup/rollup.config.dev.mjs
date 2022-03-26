@@ -3,7 +3,7 @@
 import browsersync from 'rollup-plugin-browsersync';
 import copy from 'rollup-plugin-copy';
 
-import pkg from './package.cjs';
+import pkg from '../package.cjs';
 
 import {
   input, IS_DEVELOPMENT, IS_DEPLOYMENT, name, plugins,

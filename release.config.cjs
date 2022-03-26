@@ -1,15 +1,9 @@
 /* eslint import/no-extraneous-dependencies: ["error", {"devDependencies": true}] */
-const makeCommonConfig = require('@cycjimmy/config-lib/cjs/semanticRelease/15.x/makeCommonConfig.cjs')
-  .default;
-
+const makeCommon = require('@cycjimmy/config-lib/cjs/semanticRelease/19.x/makeConfigWithPgkRootForLibrary.cjs').default;
 const pkg = require('./package.json');
 
-module.exports = makeCommonConfig({
+module.exports = makeCommon({
   githubOptions: {
     assets: [pkg.browser],
-  },
-  exec: true,
-  execOptions: {
-    publishCmd: 'npm run build',
   },
 });

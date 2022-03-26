@@ -10,7 +10,7 @@ import { terser } from 'rollup-plugin-terser';
 import myBanner from '@cycjimmy/config-lib/esm/chore/myBanner.js';
 import terserOption from '@cycjimmy/config-lib/esm/terser/4.x/production.js';
 
-import pkg from './package.cjs';
+import pkg from '../package.cjs';
 
 export const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
 export const IS_PRODUCTION = process.env.NODE_ENV === 'production';

@@ -135,7 +135,7 @@ const mySwiper4 = new Swiper('.swiper-container', {
 
 To use via a CDN include this in your HTML:
 ```text
-<script src="https://cdn.jsdelivr.net/npm/@cycjimmy/swiper-animation@5/dist/swiper-animation.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@cycjimmy/swiper-animation@6/dist/swiper-animation.umd.min.js"></script>
 ```
 
 ## Earlier Version
