@@ -159,9 +159,7 @@
    * @returns {Promise<any>}
    */
 
-  var functionToPromise = (function (normalFunction) {
-    var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-
+  var functionToPromise = ((normalFunction, timeout = 0) => {
     if (isPromise(normalFunction)) {
       return normalFunction;
     } // eslint-disable-next-line no-undef
