@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/cycjimmy/swiper-animation/compare/v5.0.0...v6.0.0) (2022-03-26)
+
+
+### Features
+
+* refactoring build tasks ([e17d30f](https://github.com/cycjimmy/swiper-animation/commit/e17d30fb7aa8f75a936b8656b4ade788e7ccd29f))
+
+
+### BREAKING CHANGES
+
+* refactoring build tasks
+
 # [5.0.0](https://github.com/cycjimmy/swiper-animation/compare/v4.1.2...v5.0.0) (2022-03-19)
 
 
