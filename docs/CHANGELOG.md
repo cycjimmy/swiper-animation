@@ -1,3 +1,10 @@
+## [6.0.1](https://github.com/cycjimmy/swiper-animation/compare/v6.0.0...v6.0.1) (2022-03-26)
+
+
+### Bug Fixes
+
+* fix root version after releasing ([67e00e5](https://github.com/cycjimmy/swiper-animation/commit/67e00e5107b56e521a76b3cf3e64d3b3d95ba98f))
+
 # [6.0.0](https://github.com/cycjimmy/swiper-animation/compare/v5.0.0...v6.0.0) (2022-03-26)
 
 
