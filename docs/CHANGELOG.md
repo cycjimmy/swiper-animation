@@ -1,3 +1,10 @@
+## [6.0.2](https://github.com/cycjimmy/swiper-animation/compare/v6.0.1...v6.0.2) (2022-06-21)
+
+
+### Bug Fixes
+
+* remove @rollup/plugin-commonjs ([5dbb89f](https://github.com/cycjimmy/swiper-animation/commit/5dbb89fd63dc58c2a7b6e6ee49ca95414091b0d4))
+
 ## [6.0.1](https://github.com/cycjimmy/swiper-animation/compare/v6.0.0...v6.0.1) (2022-03-26)
 
 
