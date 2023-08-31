@@ -21,7 +21,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
@@ -40,7 +40,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       - name: Install dependencies
         run: npm ci
@@ -49,7 +49,7 @@ jobs:
         run: npm run package
 
       - name: Semantic Release
-        uses: cycjimmy/semantic-release-action@v3
+        uses: cycjimmy/semantic-release-action@v4
         id: semantic
         with:
           branches: |
@@ -79,7 +79,7 @@ jobs:
       - name: Setup Node.js with GitHub Package Registry
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           registry-url: 'https://npm.pkg.github.com'
           scope: 'cycjimmy'
 
