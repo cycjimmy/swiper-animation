@@ -279,7 +279,7 @@
      * animate
      * @returns {Promise<unknown[]>}
      */
-    _createClass(_default, [{
+    return _createClass(_default, [{
       key: "animate",
       value: function animate() {
         var _this = this;
@@ -304,7 +304,6 @@
         return this.activeElements;
       }
     }]);
-    return _default;
   }();
 
   var _default = /*#__PURE__*/function () {
@@ -320,7 +319,7 @@
      * init
      * @param swiper
      */
-    _createClass(_default, [{
+    return _createClass(_default, [{
       key: "init",
       value: function init(swiper) {
         if (!this.animations) {
@@ -345,7 +344,6 @@
         return this.animations.animate();
       }
     }]);
-    return _default;
   }();
 
   return _default;
