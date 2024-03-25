@@ -16,7 +16,7 @@
   }
   function _toPropertyKey(t) {
     var i = _toPrimitive(t, "string");
-    return "symbol" == typeof i ? i : String(i);
+    return "symbol" == typeof i ? i : i + "";
   }
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
