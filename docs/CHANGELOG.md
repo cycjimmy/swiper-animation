@@ -1,3 +1,10 @@
+## [6.0.3](https://github.com/cycjimmy/swiper-animation/compare/v6.0.2...v6.0.3) (2024-07-17)
+
+
+### Bug Fixes
+
+* upgrade rollup to v4 ([8e3b3cd](https://github.com/cycjimmy/swiper-animation/commit/8e3b3cdd58dfe297d95e73602c6ff470b3d17176))
+
 ## [6.0.2](https://github.com/cycjimmy/swiper-animation/compare/v6.0.1...v6.0.2) (2022-06-21)
 
 

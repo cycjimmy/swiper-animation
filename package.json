@@ -1,6 +1,6 @@
 {
   "name": "@cycjimmy/swiper-animation",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "description": "Easier way to run animations on swiper.",
   "type": "module",
   "main": "dist/swiper-animation.cjs",
