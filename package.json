@@ -65,7 +65,7 @@
     "rollup": "^4.18.1",
     "rollup-plugin-browsersync": "^1.3.3",
     "rollup-plugin-copy": "^3.5.0",
-    "swiper": "^8.4.7",
+    "swiper": "^11.1.5",
     "trash-cli": "^5.0.0"
   }
 }
