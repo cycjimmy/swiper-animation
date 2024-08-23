@@ -89,21 +89,21 @@
    * determine nodeList type
    * @param nodeList
    */
-  var isNodeList = (nodeList => Object.prototype.toString.call(nodeList) === '[object NodeList]');
+  var isNodeList = nodeList => Object.prototype.toString.call(nodeList) === '[object NodeList]';
 
   /**
    * determine an array type
    * @param arr
    * @returns {boolean}
    */
-  var isArray = (arr => Object.prototype.toString.call(arr).slice(8, -1) === 'Array');
+  var isArray = arr => Object.prototype.toString.call(arr).slice(8, -1) === 'Array';
 
   /**
    * nodeList into array
    * @param nodeList
    * @returns {Array}
    */
-  var nodeListToArray = (nodeList => {
+  var nodeListToArray = nodeList => {
     if (isArray(nodeList)) {
       return nodeList;
     }
@@ -111,7 +111,7 @@
       return new Array(nodeList);
     }
     return Array.from ? Array.from(nodeList) : Array.prototype.slice.call(nodeList);
-  });
+  };
 
   var sHidden = 'visibility: hidden;';
 
@@ -140,7 +140,7 @@
    * @param promise
    * @returns {boolean}
    */
-  var isPromise = (promise => Object.prototype.toString.call(promise).slice(8, -1) === 'Promise');
+  var isPromise = promise => Object.prototype.toString.call(promise).slice(8, -1) === 'Promise';
 
   /**
    * function to promise
