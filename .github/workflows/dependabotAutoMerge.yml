@@ -1,0 +1,107 @@
+name: Dependabot Auto Merge
+on: pull_request
+permissions:
+  contents: write
+  pull-requests: write
+  # `gh pr checks` reads check runs and commit statuses; an unspecified scope is `none`
+  # once `permissions` is declared.
+  checks: read
+  statuses: read
+jobs:
+  auto-merge:
+    # Fork pull requests never receive a write token, so gate on the same-repo branch too.
+    if: >-
+      github.actor == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    # A stuck check must fail the job instead of holding a runner for six hours
+    timeout-minutes: 30
+    steps:
+      - id: metadata
+        uses: dependabot/fetch-metadata@v3
+
+      # `main` carries no required status check, because semantic-release has to
+      # push its version commit there and GitHub rejects that push while one is
+      # configured. The gate therefore lives here: wait for the aggregated CI
+      # check and only then ask for the merge.
+      #
+      # `gh pr checks --watch` cannot be used here: the check list contains this
+      # very job, so watching it would wait for itself until the job times out.
+      # Only the explicitly expected check names are polled instead.
+      - name: Wait for the pull request checks
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REQUIRED_CHECKS: Test CI Summary
+        run: |
+          for _ in $(seq 1 120); do
+            checks=$(gh pr checks "$PR_URL" --json name,bucket 2>/dev/null || echo '[]')
+            state=$(printf '%s' "$checks" | jq -r --arg required "$REQUIRED_CHECKS" '
+              ($required | split("\n") | map(select(length > 0))) as $want
+              | [ .[] | select(.name as $name | any($want[]; $name == .)) ] as $got
+              | if any($got[]; .bucket == "fail" or .bucket == "cancel") then "failed"
+                elif ($got | length) < ($want | length) then "waiting"
+                elif all($got[]; .bucket == "pass" or .bucket == "skipping") then "passed"
+                else "waiting" end
+            ')
+
+            case "$state" in
+              passed) exit 0 ;;
+              failed)
+                printf '%s' "$checks" | jq -r '.[] | select(.bucket == "fail" or .bucket == "cancel") | "  \(.name): \(.bucket)"'
+                echo "::error::A check on the pull request did not pass."
+                exit 1
+                ;;
+            esac
+
+            # A new push restarts this workflow with a fresh gate, so stop here.
+            current=$(gh pr view "$PR_URL" --json headRefOid --jq .headRefOid)
+            if [ "$current" != "$PR_HEAD_SHA" ]; then
+              echo "The pull request head moved to ${current}; leaving it to the next run."
+              exit 0
+            fi
+
+            echo "Still waiting for: $REQUIRED_CHECKS"
+            sleep 10
+          done
+
+          echo "::error::Timed out waiting for: $REQUIRED_CHECKS"
+          exit 1
+
+      - name: Merge the pull request
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # `main` has no required status check, so `--auto` merges as soon as the
+          # request is accepted. GitHub rejects the request while a check other than
+          # this one is still running (`Pull request is in unstable status`), and the
+          # name based gate above cannot rule that out: a second run of the same
+          # workflow registers identically named checks on the same commit, and its
+          # summary does not exist yet while its matrix is still running.
+          #
+          # Waiting for `mergeStateStatus` to become `CLEAN` is not an option here:
+          # this job is a check on that same commit, so it would wait for itself.
+          # Retry the request instead, and re-check the head on every attempt so a
+          # push in between leaves the merge to the run it starts.
+          for attempt in $(seq 1 12); do
+            current=$(gh pr view "$PR_URL" --json headRefOid --jq .headRefOid)
+            if [ "$current" != "$PR_HEAD_SHA" ]; then
+              echo "The pull request head moved to ${current}; leaving it to the next run."
+              exit 0
+            fi
+
+            if gh pr merge --auto --squash --match-head-commit "$PR_HEAD_SHA" "$PR_URL"; then
+              exit 0
+            fi
+
+            echo "Retrying the merge request (attempt ${attempt}/12)"
+            sleep 10
+          done
+
+          echo "::error::Could not request the merge of the pull request."
+          exit 1

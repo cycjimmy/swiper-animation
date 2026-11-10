@@ -1,0 +1,77 @@
+name: Bug report
+description: Create a report to help us improve
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below so the issue can be triaged quickly.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The version of @cycjimmy/swiper-animation you are using.
+      placeholder: 7.0.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node.js/npm versions, the Swiper version, and the browser if the problem is UI related.
+      placeholder: |
+        Node.js: 24
+        npm: 11
+        Swiper: 9
+        Browser: Chrome 130 (only if UI related)
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Steps to reproduce the behavior, or a minimal demo (repository / code sandbox) with the slide markup and the Swiper configuration.
+      placeholder: |
+        1. Go to '...'
+        2. Slide to '...'
+        3. See error
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: configuration
+    attributes:
+      label: Relevant configuration
+      description: The `data-swiper-animation*` attributes involved and how Swiper and SwiperAnimation are initialized.
+      render: text
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: The console output or stack trace around the failure, if available.
+      render: shell
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add any other context about the problem here.

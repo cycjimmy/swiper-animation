@@ -1,28 +1,28 @@
-import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise';
+import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise'
 
 /**
  * runOutAnimations
- * @param activeElements[HTMLElement]
- * @returns {Promise<unknown[]>}
+ * @param {HTMLElement[]} activeElements
+ * @returns {Promise<unknown[]>} Resolves when every leaving animation is started
  */
 export default (activeElements) => {
   const runOutTasks = activeElements.map((el) => {
     if (el.animationData.isRecovery) {
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     if (!el.animationData.outEffect) {
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     return functionToPromise(() => {
-      el.style.cssText = el.animationData.styleCache;
-      el.style.visibility = 'visible';
-      el.style.cssText += ` animation-duration:${el.animationData.outDuration}; -webkit-animation-duration:${el.animationData.outDuration};`;
+      el.style.cssText = el.animationData.styleCache
+      el.style.visibility = 'visible'
+      el.style.cssText += ` animation-duration:${el.animationData.outDuration}; -webkit-animation-duration:${el.animationData.outDuration};`
 
-      el.classList.add(el.animationData.outEffect, 'animated');
-    }, 500);
-  });
+      el.classList.add(el.animationData.outEffect, 'animated')
+    }, 500)
+  })
 
-  return Promise.all(runOutTasks);
-};
+  return Promise.all(runOutTasks)
+}

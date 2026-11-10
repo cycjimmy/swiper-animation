@@ -1,37 +1,37 @@
-import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise';
+import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise'
 
-import constants from './constants';
+import constants from './constants'
 
 /**
  * clearAnimations
- * @param activeElements[HTMLElement]
- * @returns {Promise<unknown[]>}
+ * @param {HTMLElement[]} activeElements
+ * @returns {Promise<unknown[]>} Resolves when every element is reset
  */
 export default (activeElements) => {
   const runClearTasks = activeElements.map((el) => {
     if (el.animationData.isRecovery) {
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     if (el.animationData.runOnce) {
-      return Promise.resolve();
+      return Promise.resolve()
     }
 
     return functionToPromise(() => {
       // recovery
-      el.style.cssText = el.animationData.styleCache;
+      el.style.cssText = el.animationData.styleCache
 
       el.classList.remove(
         ...[
           el.animationData.effect,
           el.animationData.outEffect,
           ...constants.AnimateCssAnimated,
-        ].filter((str) => !!str),
-      );
+        ].filter(str => !!str),
+      )
 
-      el.animationData.isRecovery = true;
-    });
-  });
+      el.animationData.isRecovery = true
+    })
+  })
 
-  return Promise.all(runClearTasks);
-};
+  return Promise.all(runClearTasks)
+}

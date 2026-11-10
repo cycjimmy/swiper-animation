@@ -3,13 +3,14 @@ name: Coveralls
 on:
   push:
     branches:
-      - master
       - main
 
   pull_request:
     branches:
-      - master
       - main
+
+permissions:
+  contents: read
 
 jobs:
   coveralls:
@@ -17,19 +18,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v7
         with:
-          node-version: 18
+          node-version: 24
+          cache: npm
 
       - name: Install dependencies and make test-coverage
         run: |
           npm ci
-          npm run coveralls
+          npm run test:coverage
 
       - name: Coveralls GitHub Action
-        uses: coverallsapp/github-action@v2.3.7
+        uses: coverallsapp/github-action@v2.3.8
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

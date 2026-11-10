@@ -1,12 +1,12 @@
-import { isPromiseReady, promisePolyfill } from './tools';
-import Animations from './Animations';
+import Animations from './Animations'
+import { isPromiseReady, promisePolyfill } from './tools'
 
 export default class {
   constructor() {
-    this.animations = null;
+    this.animations = null
 
     if (!isPromiseReady()) {
-      promisePolyfill();
+      promisePolyfill()
     }
   }
 
@@ -16,10 +16,10 @@ export default class {
    */
   init(swiper) {
     if (!this.animations) {
-      this.animations = new Animations(swiper);
+      this.animations = new Animations(swiper)
     }
 
-    return this;
+    return this
   }
 
   /**
@@ -28,9 +28,9 @@ export default class {
    */
   animate() {
     if (!isPromiseReady()) {
-      return setTimeout(() => this.animate(), 5e2);
+      return setTimeout(() => this.animate(), 5e2)
     }
 
-    return this.animations.animate();
+    return this.animations.animate()
   }
 }
