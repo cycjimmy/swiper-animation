@@ -1,7 +1,7 @@
 {
   "name": "@cycjimmy/swiper-animation",
   "type": "module",
-  "version": "6.0.3",
+  "version": "7.0.0",
   "description": "Easier way to run animations on swiper.",
   "author": "cycjimmy <cycjimmy@gmail.com> (https://github.com/cycjimmy)",
   "license": "MIT",

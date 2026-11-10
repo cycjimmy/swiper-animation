@@ -1,3 +1,13 @@
+# [7.0.0](https://github.com/cycjimmy/swiper-animation/compare/v6.0.3...v7.0.0) (2026-11-10)
+
+
+* feat!: migrate the toolchain to Vite 8 and ship ESM-only builds ([cbdd282](https://github.com/cycjimmy/swiper-animation/commit/cbdd2820e0740b1a3a085ea67274195064d4b4eb))
+
+
+### BREAKING CHANGES
+
+* the CommonJS bundle and package.cjs are removed; main/module now point at the ESM entry; require(esm) returns the module namespace so the default export must be destructured; the browser field is replaced by unpkg/jsdelivr; IE support is dropped (v6 was the last); development needs Node ^22.18.0 || >=24.11.0.
+
 ## [6.0.3](https://github.com/cycjimmy/swiper-animation/compare/v6.0.2...v6.0.3) (2024-07-17)
 
 
