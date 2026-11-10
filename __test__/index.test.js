@@ -1,32 +1,34 @@
 /* eslint no-undef: off */
-import Swiper from 'swiper';
+import Swiper from 'swiper'
 
-import SwiperAnimation from '../src/index';
+import SwiperAnimation from '../src/index'
 
 // mock swiper
-const container = document.createElement('div');
-const mySwiper = new Swiper(container);
+const container = document.createElement('div')
+const mySwiper = new Swiper(container)
 // mock slides
-mySwiper.slides = [document.createElement('div')];
+mySwiper.slides = [
+  document.createElement('div'),
+]
 
-describe('SwiperAnimation default test', () => {
-  const swiperAnimation = new SwiperAnimation();
+describe('swiperAnimation default test', () => {
+  const swiperAnimation = new SwiperAnimation()
 
-  it('SwiperAnimation.init return swiperAnimation instance', () => {
-    expect(swiperAnimation.init(mySwiper)).toBe(swiperAnimation);
-  });
+  it('swiperAnimation.init return swiperAnimation instance', () => {
+    expect(swiperAnimation.init(mySwiper)).toBe(swiperAnimation)
+  })
 
-  it('SwiperAnimation.animate test', () => swiperAnimation.init(mySwiper).animate());
-});
+  it('swiperAnimation.animate test', () => swiperAnimation.init(mySwiper).animate())
+})
 
-describe('SwiperAnimation test when Promise undefined', () => {
-  it('SwiperAnimation test', (done) => {
+describe('swiperAnimation test when Promise undefined', () => {
+  it('swiperAnimation test', (done) => {
     // mock Promise undefined
-    window.Promise = null;
+    window.Promise = null
 
-    const swiperAnimation = new SwiperAnimation().init(mySwiper);
-    swiperAnimation.animate();
+    const swiperAnimation = new SwiperAnimation().init(mySwiper)
+    swiperAnimation.animate()
 
-    setTimeout(done, 1e3);
-  });
-});
+    setTimeout(done, 1e3)
+  })
+})

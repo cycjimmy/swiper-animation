@@ -1,13 +1,15 @@
-const sHidden = 'visibility: hidden;';
+const sHidden = 'visibility: hidden;'
 
 /**
  * cacheAnimations
- * @param elements[HTMLElement]
+ * @param {HTMLElement[]} elements
  */
 export default (elements) => {
   elements.forEach((el) => {
     el.animationData = {
-      styleCache: el.attributes.style ? sHidden + el.style.cssText : sHidden,
+      styleCache: el.attributes.style
+        ? sHidden + el.style.cssText
+        : sHidden,
       effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || '',
       duration: el.dataset.duration || '.5s',
       delay: el.dataset.delay || '.5s',
@@ -15,8 +17,8 @@ export default (elements) => {
       outDuration: el.dataset.outDuration || '.5s',
       isRecovery: true,
       runOnce: !!el.dataset.swiperAnimationOnce,
-    };
+    }
 
-    el.style.cssText = el.animationData.styleCache;
-  });
-};
+    el.style.cssText = el.animationData.styleCache
+  })
+}

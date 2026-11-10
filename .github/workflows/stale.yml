@@ -1,0 +1,121 @@
+name: Stale
+
+# Closes inactive issues: general half-year staleness plus a shorter
+# lifecycle for issues that are still waiting on reporter information.
+
+on:
+  schedule:
+    # Every day at 03:00 UTC
+    - cron: '0 3 * * *'
+
+jobs:
+  stale:
+    name: Mark and close stale issues
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      actions: write # for actions/stale to refresh its progress cache
+    steps:
+      - uses: actions/stale@v11
+        with:
+          # Issues only, never touch pull requests
+          days-before-pr-stale: -1
+          days-before-pr-close: -1
+          # Mark stale after half a year of inactivity, close 14 days later
+          days-before-stale: 180
+          days-before-close: 14
+          # needs-info issues have their own shorter lifecycle (see below)
+          exempt-issue-labels: 'triaged,needs-info'
+          stale-issue-label: stale
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not
+            had recent activity. It will be closed in 14 days if no further
+            activity occurs.
+          close-issue-message: >
+            This issue was closed because it has been inactive for 14 days since
+            it was marked stale. Feel free to reopen it if the problem persists.
+
+  # Kept out of `actions/stale` on purpose: that action persists a processed-issue
+  # list under a single, hardcoded cache key, so two instances in the same
+  # repository would share it and each would skip issues the other had seen.
+  needs-info-cleanup:
+    name: Close issues that need info
+    runs-on: ubuntu-latest
+    # Only issue writes are needed here: this job touches no cache
+    permissions:
+      issues: write
+    steps:
+      - name: Close issues labelled needs-info after 7 days
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const WINDOW_MS = 7 * 24 * 60 * 60 * 1000;
+            const issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'needs-info',
+              per_page: 100,
+            });
+
+            const labelNames = (issue) => issue.labels
+              .map((label) => (typeof label === 'string' ? label : label.name));
+
+            let closed = 0;
+            for (const listed of issues) {
+              // Only issues, never pull requests
+              if (listed.pull_request) continue;
+
+              // Re-read before acting: the reporter may have added the missing
+              // details after this listing, in which case issueBot has already
+              // removed the label and nothing should be closed.
+              const { data: issue } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: listed.number,
+              });
+
+              const labels = labelNames(issue);
+              const stillNeedsInfo = issue.state === 'open'
+                && labels.includes('needs-info');
+              if (!stillNeedsInfo) continue;
+
+              // A maintainer who triaged the issue outranks the short lifecycle,
+              // which is what the `triaged` label promises on the issue itself
+              if (labels.includes('triaged')) continue;
+
+              const idleMs = Date.now() - new Date(issue.updated_at).getTime();
+              if (idleMs < WINDOW_MS) continue;
+
+              // Keep a failing issue from taking the whole run down: the writes
+              // below refresh `updated_at`, so a partial failure delays this issue
+              // to the next window instead of blocking the remaining candidates.
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  labels: ['stale'],
+                });
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: 'This issue was closed because the requested information was not ' +
+                    'provided within 7 days. Please reopen it or open a new issue with ' +
+                    'the requested details.',
+                });
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                  state_reason: 'not_planned',
+                });
+                closed += 1;
+              } catch (error) {
+                core.warning(`Failed to close #${issue.number}: ${error.message}`);
+              }
+            }
+
+            core.info(`Closed ${closed} issue(s) idle with the needs-info label for more than 7 days.`);

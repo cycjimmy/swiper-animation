@@ -1,23 +1,23 @@
 /* eslint no-undef: off */
-import { isPromiseReady, promisePolyfill } from '../src/tools';
+import { isPromiseReady, promisePolyfill } from '../src/tools'
 
-describe('Tools test', () => {
+describe('tools test', () => {
   it('isPromiseReady test', () => {
-    expect(isPromiseReady()).toBe(true);
-  });
+    expect(isPromiseReady()).toBe(true)
+  })
 
   it('promisePolyfill test', () => {
-    promisePolyfill();
-  });
+    promisePolyfill()
+  })
 
   it('promisePolyfill test when Promise undefined', (done) => {
     // mock Promise undefined
-    window.Promise = null;
+    window.Promise = null
 
-    expect(isPromiseReady()).toBe(false);
+    expect(isPromiseReady()).toBe(false)
 
-    promisePolyfill();
-    setTimeout(promisePolyfill, 1e3);
-    setTimeout(done, 2e3);
-  });
-});
+    promisePolyfill()
+    setTimeout(promisePolyfill, 1e3)
+    setTimeout(done, 2e3)
+  })
+})

@@ -4,8 +4,41 @@ updates:
     directory: /
     schedule:
       interval: daily
+    commit-message:
+      prefix: ci
+    labels:
+      - dependencies
+      - ci
+    groups:
+      github-actions:
+        patterns:
+          - '*'
 
   - package-ecosystem: npm
     directory: /
     schedule:
       interval: daily
+    commit-message:
+      prefix: chore
+    labels:
+      - dependencies
+    open-pull-requests-limit: 10
+    # @babel/*, jest* and swiper are left ungrouped on purpose: their majors
+    # need to be reviewed on their own instead of riding along with an
+    # unrelated bump.
+    groups:
+      lint:
+        patterns:
+          - eslint
+          - '@antfu/*'
+          - stylelint
+          - stylelint-config-*
+          - postcss-html
+          - globals
+      build:
+        patterns:
+          - vite
+          - terser
+          - trash-cli
+          - fs-extra
+          - '@cycjimmy/config-lib'

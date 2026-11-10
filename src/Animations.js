@@ -1,57 +1,57 @@
-import nodeListToArray from '@cycjimmy/awesome-js-funcs/esm/typeConversion/nodeListToArray';
+import nodeListToArray from '@cycjimmy/awesome-js-funcs/esm/typeConversion/nodeListToArray'
 
-import cacheAnimations from './cacheAnimations';
-import runAnimations from './runAnimations';
-import runOutAnimations from './runOutAnimations';
-import clearAnimations from './clearAnimations';
+import cacheAnimations from './cacheAnimations'
+import clearAnimations from './clearAnimations'
+import runAnimations from './runAnimations'
+import runOutAnimations from './runOutAnimations'
 
 /**
  * getSwiperContainer
  * @param swiper
- * @returns {null|*|Object}
+ * @returns {null | * | object} The container element of the swiper instance
  */
-const getSwiperContainer = (swiper) => {
+function getSwiperContainer(swiper) {
   if (swiper.el) {
     // swiper 4+
-    return swiper.el;
+    return swiper.el
   }
 
   if (swiper.container) {
     // swiper 3.x
-    // eslint-disable-next-line prefer-destructuring
-    return swiper.container[0];
+
+    return swiper.container[0]
   }
 
-  throw new Error('Illegal swiper instance');
-};
+  throw new Error('Illegal swiper instance')
+}
 
 export default class {
   constructor(swiper) {
-    this.swiper = swiper;
-    this.container = getSwiperContainer(this.swiper);
+    this.swiper = swiper
+    this.container = getSwiperContainer(this.swiper)
     this.animationElements = [
       ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation]')),
       ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation-once]')),
-    ];
-    this.activeElements = [];
+    ]
+    this.activeElements = []
 
-    cacheAnimations(this.animationElements);
+    cacheAnimations(this.animationElements)
   }
 
   /**
    * animate
-   * @returns {Promise<unknown[]>}
+   * @returns {Promise<unknown[]>} Resolves when the whole animation round is done
    */
   animate() {
     return Promise.resolve()
       .then(() => runOutAnimations(this.activeElements))
       .then(() => clearAnimations(this.activeElements))
-      .then(() => runAnimations(this._updateActiveElements()));
+      .then(() => runAnimations(this._updateActiveElements()))
   }
 
   /**
    * update activeElements
-   * @returns {[]|*[]|*}
+   * @returns {[]|*[]|*} The animation elements of the active slide
    * @private
    */
   _updateActiveElements() {
@@ -62,8 +62,8 @@ export default class {
       ...nodeListToArray(
         this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]'),
       ),
-    ];
+    ]
 
-    return this.activeElements;
+    return this.activeElements
   }
 }

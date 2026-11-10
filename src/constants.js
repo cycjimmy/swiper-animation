@@ -4,4 +4,4 @@ export default {
    * @type {string[]}
    */
   AnimateCssAnimated: ['animated', 'animate__animated'],
-};
+}
