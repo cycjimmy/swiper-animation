@@ -30,6 +30,9 @@ yarn add @cycjimmy/swiper-animation
 ## Usage
 **Swiper Animation based on [Swiper](https://github.com/nolimits4web/Swiper). Add Script of swiper in your project first.**
 
+* Tested with Swiper 3.x through 14. Both the `on` object of Swiper 4+ and the
+  `onInit` / `onSlideChangeEnd` callbacks of Swiper 3.x are supported.
+
 ```javascript
 import SwiperAnimation from '@cycjimmy/swiper-animation'
 

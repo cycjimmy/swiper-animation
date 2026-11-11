@@ -9,6 +9,8 @@ export default {
     '<rootDir>/dist/',
   ],
   testEnvironment: 'jsdom',
+  // Stubs the browser APIs Swiper 9+ touches but jsdom does not implement.
+  setupFiles: ['<rootDir>/jest.setup.js'],
   coverageThreshold: {
     global: {
       branches: 50,

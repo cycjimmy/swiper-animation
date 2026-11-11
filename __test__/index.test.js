@@ -5,6 +5,9 @@ import SwiperAnimation from '../src/index'
 
 // mock swiper
 const container = document.createElement('div')
+// swiper 9+ reads the computed style of the wrapper element while mounting, so
+// the container needs the markup a real Swiper instance expects
+container.innerHTML = '<div class="swiper-wrapper"><div class="swiper-slide"></div></div>'
 const mySwiper = new Swiper(container)
 // mock slides
 mySwiper.slides = [
