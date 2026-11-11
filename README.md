@@ -61,6 +61,31 @@ const mySwiper4 = new Swiper('.swiper-container', {
 })
 ```
 
+### SPA and framework usage
+* Create one `SwiperAnimation` instance per mounted component instead of sharing a module-level singleton.
+  Reusing an instance is supported: `init(swiper)` rebinds when a **different** swiper instance is passed, and
+  stays a no-op when the same instance is passed again.
+* After a route change, wait until the new DOM is rendered and the new swiper is created, then call
+  `swiperAnimation.init(newSwiper).animate()` again.
+* Elements left mid-animation by a previous instance are reset before their next entering animation, even
+  when the new swiper reuses the same container.
+* Elements rendered after `init()` (async content, `v-if` blocks) are cached automatically the next time their
+  slide becomes active, provided `swiper.slides` / `swiper.update()` already know about them. Pre-hide such
+  content with your own CSS if it must not flash before that.
+* Keep the existing event wiring; the library never destroys the swiper instance you pass in. Remove the
+  callbacks and destroy the swiper yourself when the component unmounts.
+* The cache lives on the DOM node, so `data-*` attribute changes on an already cached node are not picked up
+  automatically.
+
+```javascript
+// Vue 3, after the asynchronous content has been rendered.
+await nextTick()
+swiper.update()
+swiperAnimation.init(swiper).animate()
+```
+
+In Vue 2 use `this.$nextTick()` instead of the imported `nextTick()`.
+
 ### Add attribute on elements you want animated.
 ```html
 <div

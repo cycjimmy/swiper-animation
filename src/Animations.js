@@ -25,17 +25,31 @@ function getSwiperContainer(swiper) {
   throw new Error('Illegal swiper instance')
 }
 
+/**
+ * isStaleElement
+ * @param {HTMLElement} el
+ * @returns {boolean} Whether the element still carries an unfinished animation round
+ */
+const isStaleElement = el => !el.animationData.isRecovery && !el.animationData.runOnce
+
 export default class {
   constructor(swiper) {
     this.swiper = swiper
     this.container = getSwiperContainer(this.swiper)
+    this.round = 0
+    this.invalidated = false
     this.animationElements = [
       ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation]')),
       ...nodeListToArray(this.container.querySelectorAll('[data-swiper-animation-once]')),
     ]
-    this.activeElements = []
 
     cacheAnimations(this.animationElements)
+
+    // A container reused by a re-created swiper keeps the state left by the
+    // previous instance. Those elements have to go through the first clear
+    // round, otherwise their entering animation cannot run again. Once
+    // animations are never repeated.
+    this.activeElements = this.animationElements.filter(isStaleElement)
   }
 
   /**
@@ -43,10 +57,49 @@ export default class {
    * @returns {Promise<unknown[]>} Resolves when the whole animation round is done
    */
   animate() {
-    return Promise.resolve()
-      .then(() => runOutAnimations(this.activeElements))
-      .then(() => clearAnimations(this.activeElements))
-      .then(() => runAnimations(this._updateActiveElements()))
+    const round = ++this.round
+
+    return this._runStep(round, () => runOutAnimations(this.activeElements))
+      .then(() => this._runStep(round, () => clearAnimations(this.activeElements)))
+      .then(() => this._runStep(round, () => {
+        this._updateActiveElements()
+
+        // A node can be re-attached after this instance was created while still
+        // carrying an unfinished round, so the active elements are checked
+        // again before their entering animation runs.
+        const staleElements = this.activeElements.filter(isStaleElement)
+
+        return staleElements.length
+          ? clearAnimations(staleElements)
+          : undefined
+      }))
+      .then(() => this._runStep(round, () => runAnimations(this.activeElements)))
+  }
+
+  /**
+   * invalidate
+   * Stops the pending rounds of an instance which has been replaced by a new one
+   * so that they cannot write to the DOM of the new binding.
+   */
+  _invalidate() {
+    this.invalidated = true
+  }
+
+  /**
+   * runStep
+   * @param {number} round
+   * @param {Function} step
+   * @returns {Promise<*>} Resolves without running the step when the round is outdated
+   * @private
+   */
+  _runStep(round, step) {
+    return Promise.resolve().then(() => {
+      if (this.invalidated || round !== this.round) {
+        return []
+      }
+
+      return step()
+    })
   }
 
   /**
@@ -55,14 +108,19 @@ export default class {
    * @private
    */
   _updateActiveElements() {
-    this.activeElements = [
-      ...nodeListToArray(
-        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation]'),
-      ),
-      ...nodeListToArray(
-        this.swiper.slides[this.swiper.activeIndex].querySelectorAll('[data-swiper-animation-once]'),
-      ),
-    ]
+    const slide = this.swiper.slides && this.swiper.slides[this.swiper.activeIndex]
+
+    this.activeElements = slide
+      ? [
+          ...nodeListToArray(slide.querySelectorAll('[data-swiper-animation]')),
+          ...nodeListToArray(slide.querySelectorAll('[data-swiper-animation-once]')),
+        ]
+      : []
+
+    // Elements rendered after the instance was created (route remounts, async
+    // slide content) have no cache yet. They are cached right before their
+    // entering animation runs; cached elements are skipped by cacheAnimations.
+    cacheAnimations(this.activeElements)
 
     return this.activeElements
   }

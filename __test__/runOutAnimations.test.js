@@ -23,3 +23,29 @@ describe('runOutAnimations default test', () => {
     })
   })
 })
+
+describe('runOutAnimations test when animationData is undefined', () => {
+  it('skips elements which were never cached', () => {
+    const testEl = document.createElement('div')
+    testEl.className = 'untouched'
+
+    return runOutAnimations([testEl]).then(() => {
+      expect(testEl.animationData).toBeUndefined()
+      expect(testEl.className).toBe('untouched')
+    })
+  })
+
+  it('still runs the out animation of the cached elements of a mixed list', () => {
+    const cachedEl = document.createElement('div')
+    cachedEl.dataset.swiperOutAnimation = swiperOutAnimation
+    cacheAnimations([cachedEl])
+    cachedEl.animationData.isRecovery = false
+
+    const uncachedEl = document.createElement('div')
+
+    return runOutAnimations([cachedEl, uncachedEl]).then(() => {
+      expect(cachedEl.classList.contains(swiperOutAnimation)).toBe(true)
+      expect(uncachedEl.animationData).toBeUndefined()
+    })
+  })
+})

@@ -6,6 +6,13 @@ const sHidden = 'visibility: hidden;'
  */
 export default (elements) => {
   elements.forEach((el) => {
+    // An element can be scanned twice by the two selectors or again by a later
+    // round. Re-caching would snapshot the running animation style and reset
+    // `isRecovery`, so the first snapshot wins.
+    if (el.animationData) {
+      return
+    }
+
     el.animationData = {
       styleCache: el.attributes.style
         ? sHidden + el.style.cssText

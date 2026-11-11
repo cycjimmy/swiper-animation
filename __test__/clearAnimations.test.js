@@ -27,3 +27,38 @@ describe('clearAnimations default test', () => {
     })
   })
 })
+
+describe('clearAnimations test when animationData is undefined', () => {
+  it('skips elements which were never cached', () => {
+    const testEl = document.createElement('div')
+    testEl.className = 'untouched'
+    testEl.style.visibility = 'visible'
+
+    return clearAnimations([testEl]).then(() => {
+      expect(testEl.animationData).toBeUndefined()
+      expect(testEl.className).toBe('untouched')
+      expect(testEl.style.visibility).toBe('visible')
+    })
+  })
+
+  it('still recovers the cached elements of a mixed list', () => {
+    const cachedEl = document.createElement('div')
+    cachedEl.dataset.swiperAnimation = swiperAnimation
+    cacheAnimations([cachedEl])
+    cachedEl.animationData.isRecovery = false
+    cachedEl.classList.add(swiperAnimation, 'animated')
+    cachedEl.style.visibility = 'visible'
+
+    const uncachedEl = document.createElement('div')
+    uncachedEl.className = 'untouched'
+
+    return clearAnimations([cachedEl, uncachedEl]).then(() => {
+      expect(cachedEl.animationData.isRecovery).toBe(true)
+      expect(cachedEl.classList.contains(swiperAnimation)).toBe(false)
+      expect(cachedEl.classList.contains('animated')).toBe(false)
+      expect(cachedEl.style.visibility).toBe('hidden')
+      expect(uncachedEl.animationData).toBeUndefined()
+      expect(uncachedEl.className).toBe('untouched')
+    })
+  })
+})
