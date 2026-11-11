@@ -33,6 +33,7 @@
 	*/
 	var cacheAnimations_default = (elements) => {
 		elements.forEach((el) => {
+			if (el.animationData) return;
 			el.animationData = {
 				styleCache: el.attributes.style ? sHidden + el.style.cssText : sHidden,
 				effect: el.dataset.swiperAnimation || el.dataset.swiperAnimationOnce || "",
@@ -83,7 +84,7 @@ AnimateCssAnimated: ["animated", "animate__animated"] };
 	*/
 	var clearAnimations_default = (activeElements) => {
 		const runClearTasks = activeElements.map((el) => {
-			if (el.animationData.isRecovery) return Promise.resolve();
+			if (!el.animationData || el.animationData.isRecovery) return Promise.resolve();
 			if (el.animationData.runOnce) return Promise.resolve();
 			return functionToPromise_default(() => {
 				el.style.cssText = el.animationData.styleCache;
@@ -123,7 +124,7 @@ AnimateCssAnimated: ["animated", "animate__animated"] };
 	*/
 	var runOutAnimations_default = (activeElements) => {
 		const runOutTasks = activeElements.map((el) => {
-			if (el.animationData.isRecovery) return Promise.resolve();
+			if (!el.animationData || el.animationData.isRecovery) return Promise.resolve();
 			if (!el.animationData.outEffect) return Promise.resolve();
 			return functionToPromise_default(() => {
 				el.style.cssText = el.animationData.styleCache;
@@ -145,20 +146,54 @@ AnimateCssAnimated: ["animated", "animate__animated"] };
 		if (swiper.container) return swiper.container[0];
 		throw new Error("Illegal swiper instance");
 	}
+	/**
+	* isStaleElement
+	* @param {HTMLElement} el
+	* @returns {boolean} Whether the element still carries an unfinished animation round
+	*/
+	var isStaleElement = (el) => !el.animationData.isRecovery && !el.animationData.runOnce;
 	var Animations_default = class {
 		constructor(swiper) {
 			this.swiper = swiper;
 			this.container = getSwiperContainer(this.swiper);
+			this.round = 0;
+			this.invalidated = false;
 			this.animationElements = [...nodeListToArray_default(this.container.querySelectorAll("[data-swiper-animation]")), ...nodeListToArray_default(this.container.querySelectorAll("[data-swiper-animation-once]"))];
-			this.activeElements = [];
 			cacheAnimations_default(this.animationElements);
+			this.activeElements = this.animationElements.filter(isStaleElement);
 		}
 		/**
 		* animate
 		* @returns {Promise<unknown[]>} Resolves when the whole animation round is done
 		*/
 		animate() {
-			return Promise.resolve().then(() => runOutAnimations_default(this.activeElements)).then(() => clearAnimations_default(this.activeElements)).then(() => runAnimations_default(this._updateActiveElements()));
+			const round = ++this.round;
+			return this._runStep(round, () => runOutAnimations_default(this.activeElements)).then(() => this._runStep(round, () => clearAnimations_default(this.activeElements))).then(() => this._runStep(round, () => {
+				this._updateActiveElements();
+				const staleElements = this.activeElements.filter(isStaleElement);
+				return staleElements.length ? clearAnimations_default(staleElements) : void 0;
+			})).then(() => this._runStep(round, () => runAnimations_default(this.activeElements)));
+		}
+		/**
+		* invalidate
+		* Stops the pending rounds of an instance which has been replaced by a new one
+		* so that they cannot write to the DOM of the new binding.
+		*/
+		_invalidate() {
+			this.invalidated = true;
+		}
+		/**
+		* runStep
+		* @param {number} round
+		* @param {Function} step
+		* @returns {Promise<*>} Resolves without running the step when the round is outdated
+		* @private
+		*/
+		_runStep(round, step) {
+			return Promise.resolve().then(() => {
+				if (this.invalidated || round !== this.round) return [];
+				return step();
+			});
 		}
 		/**
 		* update activeElements
@@ -166,7 +201,9 @@ AnimateCssAnimated: ["animated", "animate__animated"] };
 		* @private
 		*/
 		_updateActiveElements() {
-			this.activeElements = [...nodeListToArray_default(this.swiper.slides[this.swiper.activeIndex].querySelectorAll("[data-swiper-animation]")), ...nodeListToArray_default(this.swiper.slides[this.swiper.activeIndex].querySelectorAll("[data-swiper-animation-once]"))];
+			const slide = this.swiper.slides && this.swiper.slides[this.swiper.activeIndex];
+			this.activeElements = slide ? [...nodeListToArray_default(slide.querySelectorAll("[data-swiper-animation]")), ...nodeListToArray_default(slide.querySelectorAll("[data-swiper-animation-once]"))] : [];
+			cacheAnimations_default(this.activeElements);
 			return this.activeElements;
 		}
 	};
@@ -201,7 +238,11 @@ AnimateCssAnimated: ["animated", "animate__animated"] };
 		* @param swiper
 		*/
 		init(swiper) {
-			if (!this.animations) this.animations = new Animations_default(swiper);
+			if (!this.animations || swiper && this.animations.swiper !== swiper) {
+				const previous = this.animations;
+				this.animations = new Animations_default(swiper);
+				if (previous) previous._invalidate();
+			}
 			return this;
 		}
 		/**
