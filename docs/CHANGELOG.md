@@ -1,3 +1,10 @@
+## [7.1.1](https://github.com/cycjimmy/swiper-animation/compare/v7.1.0...v7.1.1) (2026-11-11)
+
+
+### Bug Fixes
+
+* restore animations after SPA remounts ([c56e90a](https://github.com/cycjimmy/swiper-animation/commit/c56e90aff504fad81eec58966441615ec1caf51a)), closes [#19](https://github.com/cycjimmy/swiper-animation/issues/19)
+
 # [7.1.0](https://github.com/cycjimmy/swiper-animation/compare/v7.0.0...v7.1.0) (2026-11-11)
 
 
