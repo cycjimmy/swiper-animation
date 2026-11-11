@@ -1,3 +1,10 @@
+# [7.1.0](https://github.com/cycjimmy/swiper-animation/compare/v7.0.0...v7.1.0) (2026-11-11)
+
+
+### Features
+
+* support Swiper 14 ([d1f014a](https://github.com/cycjimmy/swiper-animation/commit/d1f014a5f71c25e199376e68580ccedf11cfc2b4))
+
 # [7.0.0](https://github.com/cycjimmy/swiper-animation/compare/v6.0.3...v7.0.0) (2026-11-10)
 
 
