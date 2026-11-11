@@ -7,7 +7,7 @@ import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/fun
  */
 export default (activeElements) => {
   const runOutTasks = activeElements.map((el) => {
-    if (el.animationData.isRecovery) {
+    if (!el.animationData || el.animationData.isRecovery) {
       return Promise.resolve()
     }
 

@@ -9,7 +9,7 @@ import constants from './constants'
  */
 export default (activeElements) => {
   const runClearTasks = activeElements.map((el) => {
-    if (el.animationData.isRecovery) {
+    if (!el.animationData || el.animationData.isRecovery) {
       return Promise.resolve()
     }
 
