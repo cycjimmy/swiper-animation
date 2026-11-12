@@ -32,6 +32,12 @@ yarn add @cycjimmy/swiper-animation
 
 * Tested with Swiper 3.x through 14. Both the `on` object of Swiper 4+ and the
   `onInit` / `onSlideChangeEnd` callbacks of Swiper 3.x are supported.
+* When `slidesPerView` is greater than `1`, every slide inside the viewport runs its own animation.
+  The slides are read from `swiper.visibleSlides` when `watchSlidesProgress` is enabled, otherwise
+  from the Swiper layout model (`translate` / `slidesSizesGrid`, Swiper 4+), with a rendered position
+  fallback for Swiper 3.x.
+* A slide which keeps its place inside the viewport keeps its state, so a slide change only animates
+  the slides entering or leaving the viewport.
 
 ```javascript
 import SwiperAnimation from '@cycjimmy/swiper-animation'
