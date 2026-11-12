@@ -1,3 +1,10 @@
+# [7.2.0](https://github.com/cycjimmy/swiper-animation/compare/v7.1.1...v7.2.0) (2026-11-12)
+
+
+### Features
+
+* animate every slide inside the viewport ([#641](https://github.com/cycjimmy/swiper-animation/issues/641)) ([1a3dcd9](https://github.com/cycjimmy/swiper-animation/commit/1a3dcd96429a90c8c8072acff1aa4ebe1b89085a))
+
 ## [7.1.1](https://github.com/cycjimmy/swiper-animation/compare/v7.1.0...v7.1.1) (2026-11-11)
 
 
