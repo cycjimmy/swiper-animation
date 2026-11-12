@@ -15,6 +15,21 @@
       margin: 0;
     }
 
+    body {
+      padding: 16px;
+    }
+
+    .demo-title {
+      margin-bottom: 8px;
+      color: #666;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .demo-title:not(:first-child) {
+      margin-top: 24px;
+    }
+
     .swiper-container {
       width: 400px;
       height: 300px;
@@ -27,10 +42,26 @@
       line-height: 300px;
       text-align: center;
     }
+
+    .swiper-multi {
+      width: 400px;
+      height: 160px;
+      background-color: #e3f6fb;
+    }
+
+    .demo-multi {
+      height: 100%;
+      box-sizing: border-box;
+      border: 1px solid #b9dfe9;
+      background-color: #fff;
+      line-height: 158px;
+      text-align: center;
+    }
   </style>
 </head>
 
 <body>
+<p class="demo-title">slidesPerView: 1</p>
 <div class="swiper swiper-container">
   <div class="swiper-wrapper">
     <div class="swiper-slide" data-hash="slide1">
@@ -58,6 +89,35 @@
   </div>
 </div>
 
+<p class="demo-title">slidesPerView: 2 — every visible slide animates</p>
+<div class="swiper swiper-multi">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide">
+      <div class="demo-multi"
+           data-swiper-animation="animate__fadeInUp"
+           data-swiper-out-animation="animate__fadeOut">Slide 1
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="demo-multi"
+           data-swiper-animation="animate__zoomIn"
+           data-delay=".2s">Slide 2
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="demo-multi"
+           data-swiper-animation="animate__fadeInUp">Slide 3
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="demo-multi"
+           data-swiper-animation="animate__zoomIn"
+           data-delay=".2s">Slide 4
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="//unpkg.com/swiper@14/swiper-bundle.min.js"></script>
 <script src="./swiper-animation.umd.js"></script>
 
@@ -79,6 +139,25 @@
   });
 
   console.log(mySwiper);
+
+  // One instance per swiper: `slidesPerView: 2` keeps two slides inside the
+  // viewport. The slide entering the viewport runs its animation, while a slide
+  // which stays visible keeps its state (it does not flash and is not replayed).
+  const multiSwiperAnimation = new SwiperAnimation();
+  const multiSwiper = new Swiper('.swiper-multi', {
+    slidesPerView: 2,
+    spaceBetween: 12,
+    on: {
+      init: function () {
+        multiSwiperAnimation.init(this).animate();
+      },
+      slideChange: function () {
+        multiSwiperAnimation.init(this).animate();
+      }
+    }
+  });
+
+  console.log(multiSwiper);
 </script>
 </body>
 </html>
