@@ -52,7 +52,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@cycjimmy/awesome-js-funcs": "^4.0.9"
+    "@cycjimmy/awesome-js-funcs": "^5.0.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^10.0.0",
