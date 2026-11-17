@@ -1,4 +1,4 @@
-import functionToPromise from '@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise'
+import functionToPromise from '@cycjimmy/awesome-js-funcs/typeConversion/functionToPromise'
 
 /**
  * runOutAnimations
