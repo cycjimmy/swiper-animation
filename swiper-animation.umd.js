@@ -1,20 +1,20 @@
 (function(global, factory) {
 	typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define([], factory) : (global = typeof globalThis !== "undefined" ? globalThis : global || self, global.SwiperAnimation = factory());
 })(this, function() {
-	// node_modules/@cycjimmy/awesome-js-funcs/esm/judgeBasic/isNodeList.js
-	/**
-	* determine nodeList type
-	* @param nodeList
-	*/
-	var isNodeList_default = (nodeList) => Object.prototype.toString.call(nodeList) === "[object NodeList]";
-	// node_modules/@cycjimmy/awesome-js-funcs/esm/judgeBasic/isArray.js
+	// node_modules/@cycjimmy/awesome-js-funcs/dist/judgeBasic/isArray.js
 	/**
 	* determine an array type
 	* @param arr
 	* @returns {boolean}
 	*/
 	var isArray_default = (arr) => Object.prototype.toString.call(arr).slice(8, -1) === "Array";
-	// node_modules/@cycjimmy/awesome-js-funcs/esm/typeConversion/nodeListToArray.js
+	// node_modules/@cycjimmy/awesome-js-funcs/dist/judgeBasic/isNodeList.js
+	/**
+	* determine nodeList type
+	* @param nodeList
+	*/
+	var isNodeList_default = (nodeList) => Object.prototype.toString.call(nodeList) === "[object NodeList]";
+	// node_modules/@cycjimmy/awesome-js-funcs/dist/typeConversion/nodeListToArray.js
 	/**
 	* nodeList into array
 	* @param nodeList
@@ -22,7 +22,7 @@
 	*/
 	var nodeListToArray_default = (nodeList) => {
 		if (isArray_default(nodeList)) return nodeList;
-		if (!isNodeList_default(nodeList)) return new Array(nodeList);
+		if (!isNodeList_default(nodeList)) return Array.of(nodeList);
 		return Array.from ? Array.from(nodeList) : Array.prototype.slice.call(nodeList);
 	};
 	// src/cacheAnimations.js
@@ -47,28 +47,27 @@
 			el.style.cssText = el.animationData.styleCache;
 		});
 	};
-	// node_modules/@cycjimmy/awesome-js-funcs/esm/judgeBasic/isPromise.js
+	// node_modules/@cycjimmy/awesome-js-funcs/dist/judgeBasic/isPromise.js
 	/**
 	* determine a promise type
 	* @param promise
 	* @returns {boolean}
 	*/
 	var isPromise_default = (promise) => Object.prototype.toString.call(promise).slice(8, -1) === "Promise";
-	// node_modules/@cycjimmy/awesome-js-funcs/esm/typeConversion/functionToPromise.js
+	// node_modules/@cycjimmy/awesome-js-funcs/dist/typeConversion/functionToPromise.js
 	/**
 	* function to promise
 	* @param normalFunction
 	* @param timeout
 	* @returns {Promise<any>}
 	*/
-	var functionToPromise_default = (function(normalFunction) {
-		var timeout = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : 0;
+	var functionToPromise_default = (normalFunction, timeout = 0) => {
 		if (isPromise_default(normalFunction)) return normalFunction;
 		return new Promise((resolve) => {
 			normalFunction();
 			setTimeout(resolve, timeout);
 		});
-	});
+	};
 	// src/constants.js
 	var constants_default = { 
 	/**
