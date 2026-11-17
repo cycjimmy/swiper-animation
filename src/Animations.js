@@ -1,4 +1,4 @@
-import nodeListToArray from '@cycjimmy/awesome-js-funcs/esm/typeConversion/nodeListToArray'
+import nodeListToArray from '@cycjimmy/awesome-js-funcs/typeConversion/nodeListToArray'
 
 import cacheAnimations from './cacheAnimations'
 import clearAnimations from './clearAnimations'
