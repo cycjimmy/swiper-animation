@@ -58,7 +58,7 @@
     "@antfu/eslint-config": "^10.0.0",
     "@babel/core": "^8.0.9",
     "@babel/preset-env": "^8.0.7",
-    "@cycjimmy/config-lib": "^3.2.2",
+    "@cycjimmy/config-lib": "^4.0.0",
     "babel-jest": "^30.4.1",
     "cross-env": "^10.1.0",
     "eslint": "^10.13.0",
